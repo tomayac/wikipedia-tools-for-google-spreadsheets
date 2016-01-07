@@ -11,7 +11,7 @@ documentation. The required project key is ```MGZfQ_cBpwsvTDk_-3Pp5ZWGKoUaL1Yht`
 with the identifier prefix `WikipediaTools.` as outlined below:
 
 ```javascript
-WikipediaTools.WIKISYNONYMS(article);;
+WikipediaTools.WIKISYNONYMS(article);
 
 WikipediaTools.WIKITRANSLATE(article, opt_targetLanguages, opt_returnAsObject, opt_skipHeader);
 
