@@ -40,6 +40,9 @@ function WIKITRANSLATE(article, opt_targetLanguages, opt_returnAsObject, opt_ski
 }
 ```
 
+## Demo
+See the output of the functions in this [Google spreadsheet](https://docs.google.com/spreadsheets/d/1sVduZul787O-bRzuy0UKpRl7bkouxwaIOsxXuJGm6yg/edit?usp=sharing).
+
 ## License
 
 Copyright 2015 Thomas Steiner (@tomayac)
