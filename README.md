@@ -7,36 +7,36 @@ sorted by version (choose the latest stable release).
 
 ## Usage
 Use it in your spreadsheet following the [managing libraries](https://developers.google.com/apps-script/guide_libraries)
-documentation. The required project key is ```MGZfQ_cBpwsvTDk_-3Pp5ZWGKoUaL1Yht```. You can then use the functions in the scripts editor
-using the identifier prefix `WikipediaTools.` as outlined below:
+documentation. The required project key is ```MGZfQ_cBpwsvTDk_-3Pp5ZWGKoUaL1Yht```. You can then call the functions in the **scripts editor**
+with the identifier prefix `WikipediaTools.` as outlined below:
 
 ```javascript
-WikipediaTools.GOOGLESUGGEST(keyword, opt_language);
-
-WikipediaTools.WIKIEXPAND(article, opt_targetLanguages, opt_returnAsObject);
-
-WikipediaTools.WIKIEXPAND(article, opt_targetLanguages, opt_returnAsObject);
+WikipediaTools.WIKISYNONYMS(article);;
 
 WikipediaTools.WIKITRANSLATE(article, opt_targetLanguages, opt_returnAsObject, opt_skipHeader);
+
+WikipediaTools.WIKIEXPAND(article, opt_targetLanguages, opt_returnAsObject);
+
+WikipediaTools.GOOGLESUGGEST(keyword, opt_language);
 ```
 
-If you want to use the provided functions directly from a cell, you need to alias all functions as follows:
+If you want to use the provided functions directly from a **cell** as a formula, you need to alias all functions as follows in the scripts editor:
 
 ```javascript
-function GOOGLESUGGEST(keyword, opt_language) {
-  return WikipediaTools.GOOGLESUGGEST(keyword, opt_language);
-}
-
-function WIKIEXPAND(article, opt_targetLanguages, opt_returnAsObject) {
-  return WikipediaTools.WIKIEXPAND(article, opt_targetLanguages, opt_returnAsObject);
-}
-
 function WIKISYNONYMS(article) {
   return WikipediaTools.WIKISYNONYMS(article);
 }
 
 function WIKITRANSLATE(article, opt_targetLanguages, opt_returnAsObject, opt_skipHeader) {
   return WikipediaTools.WIKITRANSLATE(article, opt_targetLanguages, opt_returnAsObject, opt_skipHeader);
+}
+
+function WIKIEXPAND(article, opt_targetLanguages, opt_returnAsObject) {
+  return WikipediaTools.WIKIEXPAND(article, opt_targetLanguages, opt_returnAsObject);
+}
+
+function GOOGLESUGGEST(keyword, opt_language) {
+  return WikipediaTools.GOOGLESUGGEST(keyword, opt_language);
 }
 ```
 
