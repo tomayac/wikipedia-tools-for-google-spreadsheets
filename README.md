@@ -17,6 +17,10 @@ WikipediaTools.WIKITRANSLATE(article, opt_targetLanguages, opt_returnAsObject, o
 
 WikipediaTools.WIKIEXPAND(article, opt_targetLanguages, opt_returnAsObject);
 
+WikipediaTools.WIKISUBCATEGORIES(category);
+
+WikipediaTools.WIKICATEGORYMEMBERS(category);
+
 WikipediaTools.GOOGLESUGGEST(keyword, opt_language);
 ```
 
@@ -35,6 +39,14 @@ function WIKIEXPAND(article, opt_targetLanguages, opt_returnAsObject) {
   return WikipediaTools.WIKIEXPAND(article, opt_targetLanguages, opt_returnAsObject);
 }
 
+function WIKICATEGORYMEMBERS(category) {
+  return WikipediaTools.WIKICATEGORYMEMBERS(category);
+}
+
+function WIKISUBCATEGORIES(category) {
+  return WikipediaTools.WIKISUBCATEGORIES(category);
+}
+
 function GOOGLESUGGEST(keyword, opt_language) {
   return WikipediaTools.GOOGLESUGGEST(keyword, opt_language);
 }
@@ -45,7 +57,7 @@ See the output of the functions in this [Google spreadsheet](https://docs.google
 
 ## License
 
-Copyright 2015 Thomas Steiner (@tomayac)
+Copyright 2016 Thomas Steiner (@tomayac)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
