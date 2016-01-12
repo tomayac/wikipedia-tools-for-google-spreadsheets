@@ -21,12 +21,24 @@ WikipediaTools.WIKISUBCATEGORIES(category);
 
 WikipediaTools.WIKICATEGORYMEMBERS(category);
 
+WikipediaTools.WIKIINBOUNDLINKS(article);
+
+WikipediaTools.WIKIOUTBOUNDLINKS(article);
+
+WikipediaTools.WIKIGEOCOORDINATES(article);
+
+WikipediaTools.WIKIDATAFACTS(article);
+
 WikipediaTools.GOOGLESUGGEST(keyword, opt_language);
 ```
 
 If you want to use the provided functions directly from a **cell** as a formula, you need to alias all functions as follows in the scripts editor:
 
 ```javascript
+function WIKIEXPAND(article, opt_targetLanguages, opt_returnAsObject) {
+  return WikipediaTools.WIKIEXPAND(article, opt_targetLanguages, opt_returnAsObject);
+}
+
 function WIKISYNONYMS(article) {
   return WikipediaTools.WIKISYNONYMS(article);
 }
@@ -35,16 +47,28 @@ function WIKITRANSLATE(article, opt_targetLanguages, opt_returnAsObject, opt_ski
   return WikipediaTools.WIKITRANSLATE(article, opt_targetLanguages, opt_returnAsObject, opt_skipHeader);
 }
 
-function WIKIEXPAND(article, opt_targetLanguages, opt_returnAsObject) {
-  return WikipediaTools.WIKIEXPAND(article, opt_targetLanguages, opt_returnAsObject);
-}
-
 function WIKICATEGORYMEMBERS(category) {
   return WikipediaTools.WIKICATEGORYMEMBERS(category);
 }
 
 function WIKISUBCATEGORIES(category) {
   return WikipediaTools.WIKISUBCATEGORIES(category);
+}
+
+function WIKIINBOUNDLINKS(article) {
+  return WikipediaTools.WIKIINBOUNDLINKS(article);
+}
+
+function WIKIOUTBOUNDLINKS(article) {
+  return WikipediaTools.WIKIOUTBOUNDLINKS(article);
+}
+
+function WIKIGEOCOORDINATES(article) {
+  return WikipediaTools.WIKIGEOCOORDINATES(article);
+}
+
+function WIKIDATAFACTS(article) {
+  return WikipediaTools.WIKIDATAFACTS(article);
 }
 
 function GOOGLESUGGEST(keyword, opt_language) {

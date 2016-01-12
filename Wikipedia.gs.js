@@ -376,6 +376,100 @@ function WIKIGEOCOORDINATES(article) {
 }
 
 /**
+ * Returns Wikidata facts for a Wikipedia article
+ *
+ * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get Wikidata facts for
+ * @return {Array<string>} The list of Wikidata facts
+ */
+function WIKIDATAFACTS(article) {
+  'use strict';
+
+  var simplifyClaims = function(claims) {
+    var claim, id, simpleClaims;
+    simpleClaims = {};
+    for (id in claims) {
+      claim = claims[id];
+      simpleClaims[id] = simpifyClaim(claim);
+    }
+    return simpleClaims;
+  };
+
+  var simpifyClaim = function(claim) {
+    var i, len, simpifiedStatement, simplifiedClaim, statement;
+    simplifiedClaim = [];
+    for (i = 0, len = claim.length; i < len; i++) {
+      statement = claim[i];
+      simpifiedStatement = simpifyStatement(statement);
+      if (simpifiedStatement !== null) {
+        simplifiedClaim.push(simpifiedStatement);
+      }
+    }
+    return simplifiedClaim;
+  };
+
+  var simpifyStatement = function(statement) {
+    var datatype, datavalue, mainsnak;
+    mainsnak = statement.mainsnak;
+    if (mainsnak === null) {
+      return null;
+    }
+    datatype = mainsnak.datatype, datavalue = mainsnak.datavalue;
+    if (datavalue === null) {
+      return null;
+    }
+    switch (datatype) {
+      case 'string':
+      case 'commonsMedia':
+      case 'url':
+        return datavalue.value;
+      case 'monolingualtext':
+        return datavalue.value.text;
+      case 'wikibase-item':
+        return 'Q' + datavalue.value['numeric-id'];
+      case 'time':
+        return datavalue.value.time;
+      case 'quantity':
+        return datavalue.value.amount;
+      default:
+        return null;
+    }
+  };
+
+  if (!article) {
+    return '';
+  }
+  var results = [];
+  try {
+    var language = article.split(':')[0];
+    var title = article.split(':')[1];
+    if (!title) {
+      return '';
+    }
+    var url = 'https://wikidata.org/w/api.php' +
+        '?action=wbgetentities' +
+        '&sites=' + language + 'wiki' +
+        '&format=json' +
+        '&props=claims' +
+        '&titles=' + title.replace(/\s/g, '_');
+    var json = JSON.parse(UrlFetchApp.fetch(url).getContentText());
+    var entity = Object.keys(json.entities)[0];
+    var simplifiedClaims = simplifyClaims(json.entities[entity].claims);
+    for (var claim in simplifiedClaims) {
+      var claims = simplifiedClaims[claim].filter(function(value) {
+        return value !== null;
+      });
+      // Only return single-object facts
+      if (claims.length === 1) {
+        results.push([claim, claims[0]]);
+      }
+    }
+  } catch (e) {
+    // no-op
+  }
+  return results.length > 0 ? results : '';
+}
+
+/**
  * Returns Google Suggest results for the given keyword
  *
  * @param {string} keyword The keyword to get suggestions for
