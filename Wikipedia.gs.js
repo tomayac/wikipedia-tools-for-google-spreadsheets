@@ -337,6 +337,15 @@ function WIKIOUTBOUNDLINKS(article) {
 }
 
 /**
+ * Returns Wikipedia mutual links, i.e, the intersection of inbound and outbound links for a Wikipedia article
+ *
+ * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get mutual links for
+ * @return {Array<string>} The list of mutual links
+ */
+function WIKIMUTUALLINKS(article) {
+}
+
+/**
  * Returns Wikipedia geocoordinates for a Wikipedia article
  *
  * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get geocoordinates for
@@ -368,7 +377,7 @@ function WIKIGEOCOORDINATES(article) {
         .getChild('co');
     var latitude = coordinates.getAttribute('lat').getValue();
     var longitude = coordinates.getAttribute('lon').getValue();
-    results = [latitude, longitude];
+    results = [[latitude, longitude]];
   } catch (e) {
     // no-op
   }
