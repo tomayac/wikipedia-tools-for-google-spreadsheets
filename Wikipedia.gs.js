@@ -17,6 +17,7 @@
 
 /* globals UrlFetchApp, XmlService */
 /* jshint -W004 */
+/* jshint loopfunc: true */
 
 /**
  * Returns Wikipedia synonyms (redirects) for a Wikipedia article
@@ -343,6 +344,12 @@ function WIKIOUTBOUNDLINKS(article) {
  * @return {Array<string>} The list of mutual links
  */
 function WIKIMUTUALLINKS(article) {
+  var inboundLinks = WIKIINBOUNDLINKS(article);
+  var outboundLinks = WIKIOUTBOUNDLINKS(article);
+  var mutualLinks = inboundLinks.filter(function(link) {
+    return outboundLinks.indexOf(link) > -1;
+  });
+  return mutualLinks;
 }
 
 /**
@@ -394,21 +401,20 @@ function WIKIDATAFACTS(article) {
   'use strict';
 
   var simplifyClaims = function(claims) {
-    var claim, id, simpleClaims;
-    simpleClaims = {};
-    for (id in claims) {
-      claim = claims[id];
+    var simpleClaims = {};
+    for (var id in claims) {
+      var claim = claims[id];
       simpleClaims[id] = simpifyClaim(claim);
     }
     return simpleClaims;
   };
 
   var simpifyClaim = function(claim) {
-    var i, len, simpifiedStatement, simplifiedClaim, statement;
-    simplifiedClaim = [];
-    for (i = 0, len = claim.length; i < len; i++) {
-      statement = claim[i];
-      simpifiedStatement = simpifyStatement(statement);
+    var simplifiedClaim = [];
+    var len = claim.length;
+    for (var i = 0; i < len; i++) {
+      var statement = claim[i];
+      var simpifiedStatement = simpifyStatement(statement);
       if (simpifiedStatement !== null) {
         simplifiedClaim.push(simpifiedStatement);
       }
@@ -417,12 +423,12 @@ function WIKIDATAFACTS(article) {
   };
 
   var simpifyStatement = function(statement) {
-    var datatype, datavalue, mainsnak;
-    mainsnak = statement.mainsnak;
+    var mainsnak = statement.mainsnak;
     if (mainsnak === null) {
       return null;
     }
-    datatype = mainsnak.datatype, datavalue = mainsnak.datavalue;
+    var datatype = mainsnak.datatype;
+    var datavalue = mainsnak.datavalue;
     if (datavalue === null) {
       return null;
     }
@@ -434,7 +440,9 @@ function WIKIDATAFACTS(article) {
       case 'monolingualtext':
         return datavalue.value.text;
       case 'wikibase-item':
-        return 'Q' + datavalue.value['numeric-id'];
+        var qid = 'Q' + datavalue.value['numeric-id'];
+        qids.push(qid);
+        return qid;
       case 'time':
         return datavalue.value.time;
       case 'quantity':
@@ -442,6 +450,38 @@ function WIKIDATAFACTS(article) {
       default:
         return null;
     }
+  };
+
+  var getPropertyAndEntityLabels = function(propertiesAndEntities) {
+    var labels = {};
+    try {
+      var size = 50;
+      var j = propertiesAndEntities.length;
+      for (var i = 0; i < j; i += size) {
+        var chunk = propertiesAndEntities.slice(i, i + size);
+        var url = 'https://www.wikidata.org/w/api.php' +
+            '?action=wbgetentities' +
+            '&languages=en' +
+            '&format=json' +
+            '&props=labels' +
+            '&ids=' + chunk.join('%7C');
+        var json = JSON.parse(UrlFetchApp.fetch(url).getContentText());
+        var entities = json.entities;
+        chunk.forEach(function(item) {
+          if ((entities[item]) &&
+              (entities[item].labels) &&
+              (entities[item].labels.en) &&
+              (entities[item].labels.en.value)) {
+            labels[item] = entities[item].labels.en.value;
+          } else {
+            labels[item] = false;
+          }
+        });
+      }
+    } catch (e) {
+      // no-op
+    }
+    return labels;
   };
 
   if (!article) {
@@ -462,14 +502,21 @@ function WIKIDATAFACTS(article) {
         '&titles=' + title.replace(/\s/g, '_');
     var json = JSON.parse(UrlFetchApp.fetch(url).getContentText());
     var entity = Object.keys(json.entities)[0];
+    var qids = [];
     var simplifiedClaims = simplifyClaims(json.entities[entity].claims);
+    var properties = Object.keys(simplifiedClaims);
+    var labels = getPropertyAndEntityLabels(properties.concat(qids));
     for (var claim in simplifiedClaims) {
       var claims = simplifiedClaims[claim].filter(function(value) {
         return value !== null;
       });
       // Only return single-object facts
       if (claims.length === 1) {
-        results.push([claim, claims[0]]);
+        var label = labels[claim];
+        var value = /^Q\d+$/.test(claims[0]) ? labels[claims[0]] : claims[0];
+        if (label && value) {
+          results.push([label, value]);
+        }
       }
     }
   } catch (e) {
