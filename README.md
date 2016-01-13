@@ -25,6 +25,8 @@ WikipediaTools.WIKIINBOUNDLINKS(article);
 
 WikipediaTools.WIKIOUTBOUNDLINKS(article);
 
+WikipediaTools.WIKIMUTUALLINKS(article);
+
 WikipediaTools.WIKIGEOCOORDINATES(article);
 
 WikipediaTools.WIKIDATAFACTS(article);
@@ -61,6 +63,10 @@ function WIKIINBOUNDLINKS(article) {
 
 function WIKIOUTBOUNDLINKS(article) {
   return WikipediaTools.WIKIOUTBOUNDLINKS(article);
+}
+
+function WIKIMUTUALLINKS(article) {
+  return WikipediaTools.WIKIMUTUALLINKS(article);
 }
 
 function WIKIGEOCOORDINATES(article) {
