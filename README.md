@@ -29,6 +29,8 @@ WikipediaTools.WIKIMUTUALLINKS(article);
 
 WikipediaTools.WIKIGEOCOORDINATES(article);
 
+WikipediaTools.WIKIPAGEVIEWS(article, start, end);
+
 WikipediaTools.WIKIDATAFACTS(article);
 
 WikipediaTools.GOOGLESUGGEST(keyword, opt_language);
@@ -71,6 +73,10 @@ function WIKIMUTUALLINKS(article) {
 
 function WIKIGEOCOORDINATES(article) {
   return WikipediaTools.WIKIGEOCOORDINATES(article);
+}
+
+function WIKIPAGEVIEWS(article, start, end) {
+  return WikipediaTools.WIKIPAGEVIEWS(article, start, end);
 }
 
 function WIKIDATAFACTS(article) {

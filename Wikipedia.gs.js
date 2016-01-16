@@ -44,7 +44,7 @@ function WIKISYNONYMS(article) {
         '&blfilterredir=redirects' +
         '&bllimit=max' +
         '&format=xml' +
-        '&bltitle=' + title.replace(/\s/g, '_');
+        '&bltitle=' + encodeURIComponent(title.replace(/\s/g, '_'));
     var xml = UrlFetchApp.fetch(url).getContentText();
     var document = XmlService.parse(xml);
     var entries = document.getRootElement().getChild('query')
@@ -99,7 +99,7 @@ function WIKITRANSLATE(article, opt_targetLanguages, opt_returnAsObject,
         '&prop=langlinks' +
         '&format=xml' +
         '&lllimit=max' +
-        '&titles=' + title.replace(/\s/g, '_');
+        '&titles=' + encodeURIComponent(title.replace(/\s/g, '_'));
     var xml = UrlFetchApp.fetch(url).getContentText();
     var document = XmlService.parse(xml);
     var entries = document.getRootElement().getChild('query').getChild('pages')
@@ -283,7 +283,7 @@ function WIKIINBOUNDLINKS(article) {
         '&bllimit=max' +
         '&blnamespace=0' +
         '&format=xml' +
-        '&bltitle=' + title.replace(/\s/g, '_');
+        '&bltitle=' + encodeURIComponent(title.replace(/\s/g, '_'));
     var xml = UrlFetchApp.fetch(url).getContentText();
     var document = XmlService.parse(xml);
     var entries = document.getRootElement().getChild('query')
@@ -322,7 +322,7 @@ function WIKIOUTBOUNDLINKS(article) {
         '&plnamespace=0' +
         '&format=xml' +
         '&pllimit=max' +
-        '&titles=' + title.replace(/\s/g, '_');
+        '&titles=' + encodeURIComponent(title.replace(/\s/g, '_'));
     var xml = UrlFetchApp.fetch(url).getContentText();
     var document = XmlService.parse(xml);
     var entries = document.getRootElement().getChild('query').getChild('pages')
@@ -376,7 +376,7 @@ function WIKIGEOCOORDINATES(article) {
         '&format=xml' +
         '&colimit=max' +
         '&coprimary=primary' +
-        '&titles=' + title.replace(/\s/g, '_');
+        '&titles=' + encodeURIComponent(title.replace(/\s/g, '_'));
     var xml = UrlFetchApp.fetch(url).getContentText();
     var document = XmlService.parse(xml);
     var coordinates = document.getRootElement().getChild('query')
@@ -499,7 +499,7 @@ function WIKIDATAFACTS(article) {
         '&sites=' + language + 'wiki' +
         '&format=json' +
         '&props=claims' +
-        '&titles=' + title.replace(/\s/g, '_');
+        '&titles=' + encodeURIComponent(title.replace(/\s/g, '_'));
     var json = JSON.parse(UrlFetchApp.fetch(url).getContentText());
     var entity = Object.keys(json.entities)[0];
     var qids = [];
@@ -519,6 +519,48 @@ function WIKIDATAFACTS(article) {
         }
       }
     }
+  } catch (e) {
+    // no-op
+  }
+  return results.length > 0 ? results : '';
+}
+
+/**
+ * Returns Wikipedia pageviews statistics for a Wikipedia article
+ *
+ * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get pageviews statistics for
+ * @param {string} start The start date in the format "YYYYMMDD" ("2007-06-08") since when pageviews statistics should be retrieved from
+ * @param {string} end The end date in the format "YYYYMMDD" ("2007-06-08") until when pageviews statistics should be retrieved to
+ * @return {Array<number>} The list of pageviews per day
+ */
+function WIKIPAGEVIEWS(article, start, end) {
+  if (!article) {
+    return '';
+  }
+  var results = [];
+  try {
+    var language = article.split(':')[0];
+    var title = article.split(':')[1];
+    if (!title) {
+      return '';
+    }
+    var granularity = 'daily';
+    var url = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/' +
+        'per-article' +
+        '/' + language + '.wikipedia' +
+        '/all-access' +
+        '/user' +
+        '/' +  encodeURIComponent(title.replace(/\s/g, '_')) +
+        '/' + granularity +
+        '/' + start +
+        '/' + end;
+    var json = JSON.parse(UrlFetchApp.fetch(url).getContentText());
+    json.items.forEach(function(item) {
+      results.push([
+        granularity === 'daily' ? item.timestamp.slice(0, -2) : item.timestamp,
+        item.views
+      ]);
+    });
   } catch (e) {
     // no-op
   }
