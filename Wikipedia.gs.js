@@ -534,6 +534,19 @@ function WIKIDATAFACTS(article) {
  * @return {Array<number>} The list of pageviews per day
  */
 function WIKIPAGEVIEWS(article, start, end) {
+
+  var getIsoDate = function(date) {
+    var date = new Date(date);
+    var year = date.getFullYear();
+    var month = (date.getMonth() + 1) < 10 ?
+        '0' + (date.getMonth() + 1) :
+        (date.getMonth() + 1).toString();
+    var day = date.getDate() < 10 ?
+        '0' + date.getDate() :
+        date.getDate().toString();
+    return year + month + day;
+  };
+
   if (!article) {
     return '';
   }
@@ -544,20 +557,34 @@ function WIKIPAGEVIEWS(article, start, end) {
     if (!title) {
       return '';
     }
-    var granularity = 'daily';
+    if (typeof start === 'object') {
+      start = getIsoDate(start);
+    }
+    if (typeof end === 'object') {
+      end = getIsoDate(end);
+    }
     var url = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/' +
         'per-article' +
         '/' + language + '.wikipedia' +
         '/all-access' +
         '/user' +
         '/' +  encodeURIComponent(title.replace(/\s/g, '_')) +
-        '/' + granularity +
+        '/daily' +
         '/' + start +
         '/' + end;
     var json = JSON.parse(UrlFetchApp.fetch(url).getContentText());
     json.items.forEach(function(item) {
+      var timestamp = item.timestamp
+          .replace(/^(\d{4})(\d{2})(\d{2})(\d{2})$/, '$1-$2-$3-$4').split('-');
+      timestamp = new Date(Date.UTC(
+          parseInt(timestamp[0], 10), // Year
+          parseInt(timestamp[1], 10) - 1, // Month
+          parseInt(timestamp[2], 10), // Day
+          parseInt(timestamp[3], 10), // Hour
+          0, // Minute
+          0)); // Second))
       results.push([
-        granularity === 'daily' ? item.timestamp.slice(0, -2) : item.timestamp,
+        timestamp,
         item.views
       ]);
     });
