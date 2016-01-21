@@ -644,6 +644,6 @@ function showSidebar_() {
   var html = HtmlService.createHtmlOutputFromFile('Documentation')
       .setSandboxMode(HtmlService.SandboxMode.IFRAME)
       .setTitle('Documentation')
-      .setWidth(410);
+      .setWidth(300);
   SpreadsheetApp.getUi().showSidebar(html);
 }
