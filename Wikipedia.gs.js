@@ -627,24 +627,23 @@ function GOOGLESUGGEST(keyword, opt_language) {
   return results.length > 0 ? results : '';
 }
 
-function onInstall(e) {
-  onOpen(e);
+function onInstall() {
+  onOpen();
 }
 
 function onOpen() {
   SpreadsheetApp.getUi().createAddonMenu()
-      .addItem('Use in this spreadsheet', 'use_').addToUi();
+      .addItem('Show sidebar', 'showSidebar_')
+      .addToUi();
 }
 
 /**
- * Enables the add-on on for the current spreadsheet (simply by running) and
- * shows a popup informing the user of the new functions that are available.
+ * Shows a sidebar with help
  */
-function use_() {
-  var title = 'Wikipedia Tools for Google Spreadsheets';
-  var message = 'The functions with the prefix WIKI* (autocomplete) are now ' +
-      'available in this spreadsheet. More information is available in the ' +
-      'function help box that appears when you start using them in a forumula.';
-  var ui = SpreadsheetApp.getUi();
-  ui.alert(title, message, ui.ButtonSet.OK);
+function showSidebar_() {
+  var html = HtmlService.createHtmlOutputFromFile('Documentation')
+      .setSandboxMode(HtmlService.SandboxMode.IFRAME)
+      .setTitle('Documentation')
+      .setWidth(410);
+  SpreadsheetApp.getUi().showSidebar(html);
 }
