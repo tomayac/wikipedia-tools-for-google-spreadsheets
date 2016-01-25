@@ -32,8 +32,8 @@ function WIKISYNONYMS(article) {
   }
   var results = [];
   try {
-    var language = article.split(':')[0];
-    var title = article.split(':')[1];
+    var language = article.split(/:(.+)?/)[0];
+    var title = article.split(/:(.+)?/)[1];
     if (!title) {
       return '';
     }
@@ -84,8 +84,8 @@ function WIKITRANSLATE(article, opt_targetLanguages, opt_returnAsObject,
   });
   opt_targetLanguages = Object.keys(temp);
   try {
-    var language = article.split(':')[0];
-    var title = article.split(':')[1];
+    var language = article.split(/:(.+)?/)[0];
+    var title = article.split(/:(.+)?/)[1];
     if (!title) {
       return '';
     }
@@ -147,8 +147,8 @@ function WIKIEXPAND(article, opt_targetLanguages, opt_returnAsObject) {
   }
   var results = opt_returnAsObject ? {} : [];
   try {
-    var language = article.split(':')[0];
-    var title = article.split(':')[1];
+    var language = article.split(/:(.+)?/)[0];
+    var title = article.split(/:(.+)?/)[1];
     if (!title) {
       return '';
     }
@@ -190,8 +190,8 @@ function WIKICATEGORYMEMBERS(category) {
   }
   var results = [];
   try {
-    var language = category.split(':')[0];
-    var title = category.split(':')[1] + ':' + category.split(':')[2];
+    var language = category.split(/:(.+)?/)[0];
+    var title = category.split(/:(.+)?/)[1] + ':' + category.split(/:(.+)?/)[2];
     if (!title) {
       return '';
     }
@@ -231,8 +231,8 @@ function WIKISUBCATEGORIES(category) {
   }
   var results = [];
   try {
-    var language = category.split(':')[0];
-    var title = category.split(':')[1] + ':' + category.split(':')[2];
+    var language = category.split(/:(.+)?/)[0];
+    var title = category.split(/:(.+)?/)[1] + ':' + category.split(/:(.+)?/)[2];
     if (!title) {
       return '';
     }
@@ -272,8 +272,8 @@ function WIKIINBOUNDLINKS(article) {
   }
   var results = [];
   try {
-    var language = article.split(':')[0];
-    var title = article.split(':')[1];
+    var language = article.split(/:(.+)?/)[0];
+    var title = article.split(/:(.+)?/)[1];
     if (!title) {
       return '';
     }
@@ -311,8 +311,8 @@ function WIKIOUTBOUNDLINKS(article) {
   }
   var results = [];
   try {
-    var language = article.split(':')[0];
-    var title = article.split(':')[1];
+    var language = article.split(/:(.+)?/)[0];
+    var title = article.split(/:(.+)?/)[1];
     if (!title) {
       return '';
     }
@@ -344,6 +344,7 @@ function WIKIOUTBOUNDLINKS(article) {
  * @return {Array<string>} The list of mutual links
  */
 function WIKIMUTUALLINKS(article) {
+  'use strict';
   var inboundLinks = WIKIINBOUNDLINKS(article);
   var outboundLinks = WIKIOUTBOUNDLINKS(article);
   var mutualLinks = inboundLinks.filter(function(link) {
@@ -365,8 +366,8 @@ function WIKIGEOCOORDINATES(article) {
   }
   var results = [];
   try {
-    var language = article.split(':')[0];
-    var title = article.split(':')[1];
+    var language = article.split(/:(.+)?/)[0];
+    var title = article.split(/:(.+)?/)[1];
     if (!title) {
       return '';
     }
@@ -489,8 +490,8 @@ function WIKIDATAFACTS(article) {
   }
   var results = [];
   try {
-    var language = article.split(':')[0];
-    var title = article.split(':')[1];
+    var language = article.split(/:(.+)?/)[0];
+    var title = article.split(/:(.+)?/)[1];
     if (!title) {
       return '';
     }
@@ -529,11 +530,12 @@ function WIKIDATAFACTS(article) {
  * Returns Wikipedia pageviews statistics for a Wikipedia article
  *
  * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get pageviews statistics for
- * @param {string} start The start date in the format "YYYYMMDD" ("2007-06-08") since when pageviews statistics should be retrieved from
- * @param {string} end The end date in the format "YYYYMMDD" ("2007-06-08") until when pageviews statistics should be retrieved to
- * @return {Array<number>} The list of pageviews per day
+ * @param {string=} start The start date in the format "YYYYMMDD" ("2007-06-08") since when pageviews statistics should be retrieved from (optional)
+ * @param {string=} end The end date in the format "YYYYMMDD" ("2007-06-08") until when pageviews statistics should be retrieved to (optional)
+ * @return {Array<number>} The list of pageviews between start and end per day
  */
-function WIKIPAGEVIEWS(article, start, end) {
+function WIKIPAGEVIEWS(article, opt_start, opt_end) {
+  'use strict';
 
   var getIsoDate = function(date) {
     var date = new Date(date);
@@ -552,16 +554,18 @@ function WIKIPAGEVIEWS(article, start, end) {
   }
   var results = [];
   try {
-    var language = article.split(':')[0];
-    var title = article.split(':')[1];
+    var language = article.split(/:(.+)?/)[0];
+    var title = article.split(/:(.+)?/)[1];
     if (!title) {
       return '';
     }
-    if (typeof start === 'object') {
-      start = getIsoDate(start);
+    opt_start = opt_start || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    if (typeof opt_start === 'object') {
+      opt_start = getIsoDate(opt_start);
     }
-    if (typeof end === 'object') {
-      end = getIsoDate(end);
+    opt_end = opt_end || new Date(Date.now() - 1 * 24 * 60 * 60 * 1000);
+    if (typeof opt_end === 'object') {
+      opt_end = getIsoDate(opt_end);
     }
     var url = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/' +
         'per-article' +
@@ -570,8 +574,8 @@ function WIKIPAGEVIEWS(article, start, end) {
         '/user' +
         '/' +  encodeURIComponent(title.replace(/\s/g, '_')) +
         '/daily' +
-        '/' + start +
-        '/' + end;
+        '/' + opt_start +
+        '/' + opt_end;
     var json = JSON.parse(UrlFetchApp.fetch(url).getContentText());
     json.items.forEach(function(item) {
       var timestamp = item.timestamp
@@ -588,6 +592,7 @@ function WIKIPAGEVIEWS(article, start, end) {
         item.views
       ]);
     });
+    results.reverse(); // Order from new to old
   } catch (e) {
     // no-op
   }
@@ -597,13 +602,79 @@ function WIKIPAGEVIEWS(article, start, end) {
 /**
  * Returns Wikipedia pageedits statistics for a Wikipedia article
  *
- * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get pageedit statistics for
- * @param {string} start The start date in the format "YYYYMMDD" ("2007-06-08") since when pageedit statistics should be retrieved from
- * @param {string} end The end date in the format "YYYYMMDD" ("2007-06-08") until when pageedit statistics should be retrieved to
- * @return {Array<number>} The list of pageedits between start and end and their delta
+ * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get pageedits statistics for
+ * @param {string=} start The start date in the format "YYYYMMDD" ("2007-06-08") since when pageedits statistics should be retrieved from (optional)
+ * @param {string=} end The end date in the format "YYYYMMDD" ("2007-06-08") until when pageedits statistics should be retrieved to (optional)
+ * @return {Array<number>} The list of pageedits between start and end and their deltas
  */
-function WIKIPAGEEDITS(article, start, end) {
+function WIKIPAGEEDITS(article, opt_start, opt_end) {
+  'use strict';
 
+  var getIsoDate = function(date, time) {
+    var date = new Date(date);
+    var year = date.getFullYear();
+    var month = (date.getMonth() + 1) < 10 ?
+        '0' + (date.getMonth() + 1) :
+        (date.getMonth() + 1).toString();
+    var day = date.getDate() < 10 ?
+        '0' + date.getDate() :
+        date.getDate().toString();
+    return year + '-' + month + '-' + day + time;
+  };
+
+  if (!article) {
+    return '';
+  }
+  var results = [];
+  try {
+    var language = article.split(/:(.+)?/)[0];
+    var title = article.split(/:(.+)?/)[1];
+    if (!title) {
+      return '';
+    }
+    opt_start = opt_start || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    if (typeof opt_start === 'object') {
+      opt_start = getIsoDate(opt_start, 'T00:00:00');
+    }
+    opt_end = opt_end || new Date();
+    if (typeof opt_end === 'object') {
+      opt_end = getIsoDate(opt_end, 'T23:59:59');
+    }
+    var url = 'https://en.wikipedia.org/w/api.php' +
+        '?action=query' +
+        '&prop=revisions' +
+        '&rvprop=size%7Ctimestamp' +
+        '&rvlimit=max' +
+        '&format=xml' +
+        '&rvstart=' + opt_end + // Reversed on purpose due to confusing API name
+        '&rvend=' + opt_start + // Reversed on purpose due to confusing API name
+        '&titles=' + encodeURIComponent(title.replace(/\s/g, '_'));
+    var xml = UrlFetchApp.fetch(url).getContentText();
+    var document = XmlService.parse(xml);
+    var entries = document.getRootElement().getChild('query').getChild('pages')
+        .getChild('page').getChild('revisions').getChildren('rev');
+    for (var i = 0; i < entries.length - 1; i++) {
+      var timestamp = entries[i].getAttribute('timestamp').getValue().replace(
+          /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z$/,
+          '$1-$2-$3-$4-$5-$6').split('-');
+      timestamp = new Date(Date.UTC(
+          parseInt(timestamp[0], 10), // Year
+          parseInt(timestamp[1], 10) - 1, // Month
+          parseInt(timestamp[2], 10), // Day
+          parseInt(timestamp[3], 10), // Hour
+          parseInt(timestamp[4], 10), // Minute
+          parseInt(timestamp[5], 10))); // Second
+      var delta = entries[i].getAttribute('size').getValue() -
+          entries[i + 1].getAttribute('size').getValue();
+      results.push([
+        timestamp,
+        delta
+      ]);
+    }
+  } catch (e) {
+    // no-op
+  }
+  return results.length > 0 ? results : '';
 }
 
 /**
@@ -640,10 +711,12 @@ function GOOGLESUGGEST(keyword, opt_language) {
 }
 
 function onInstall() {
+  'use strict';
   onOpen();
 }
 
 function onOpen() {
+  'use strict';
   SpreadsheetApp.getUi().createAddonMenu()
       .addItem('Show sidebar', 'showSidebar_')
       .addToUi();
@@ -653,6 +726,7 @@ function onOpen() {
  * Shows a sidebar with help
  */
 function showSidebar_() {
+  'use strict';
   var html = HtmlService.createHtmlOutputFromFile('Documentation')
       .setSandboxMode(HtmlService.SandboxMode.IFRAME)
       .setTitle('Documentation')

@@ -27,7 +27,7 @@
     <div id="gc-main" class="main">
       <div id="gc-content" class="c7">
         <h1 class="page_title">Wikipedia Tools</h1>
-        <h2>WIKIPAGEVIEWS(string article, string start, string end)</h2>
+        <h2>WIKIPAGEVIEWS(string article, string opt_start, string opt_end)</h2>
         <p>Returns Wikipedia pageviews statistics for a Wikipedia article</p>
         <h3>Arguments:</h3>
         <table class="c4">
@@ -44,15 +44,58 @@
               pageviews statistics for</td>
             </tr>
             <tr>
-              <td>start</td>
+              <td>opt_start</td>
               <td><code>string</code></td>
               <td>The start date in the format "YYYYMMDD" ("2007-06-08") since when pageviews
-              statistics should be retrieved from</td>
+              statistics should be retrieved from (optional)</td>
+            </tr>
+            <tr>
+              <td>opt_end</td>
+              <td><code>string</code></td>
+              <td>The end date in the format "YYYYMMDD" ("2007-06-08") until when pageviews
+              statistics should be retrieved to (optional)</td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>Return Values:</h3>
+        <table class="c4">
+          <tbody>
+            <tr>
+              <th scope="col" class="c5">Type</th>
+              <th scope="col" class="c6">Description</th>
+            </tr>
+            <tr>
+              <td><code>Array&lt;number&gt;</code></td>
+              <td>The list of pageviews between start and end per day</td>
+            </tr>
+          </tbody>
+        </table>
+        <h2>WIKIPAGEEDITS(string article, string opt_start, string opt_end)</h2>
+        <p>Wikipedia pageedits statistics for a Wikipedia article</p>
+        <h3>Arguments:</h3>
+        <table class="c4">
+          <tbody>
+            <tr>
+              <th scope="col" class="c1">Name</th>
+              <th scope="col" class="c2">Type</th>
+              <th scope="col" class="c3">Description</th>
+            </tr>
+            <tr>
+              <td>article</td>
+              <td><code>string</code></td>
+              <td>The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get
+              pageviews statistics for</td>
+            </tr>
+            <tr>
+              <td>opt_start</td>
+              <td><code>string</code></td>
+              <td>The start date in the format "YYYYMMDD" ("2007-06-08") since when pageedits
+              statistics should be retrieved from (optional)</td>
             </tr>
             <tr>
               <td>end</td>
               <td><code>string</code></td>
-              <td>The end date in the format "YYYYMMDD" ("2007-06-08") until when pageviews
+              <td>The end date in the format "YYYYMMDD" ("2007-06-08") until when pageedits
               statistics should be retrieved to</td>
             </tr>
           </tbody>
@@ -66,7 +109,7 @@
             </tr>
             <tr>
               <td><code>Array&lt;number&gt;</code></td>
-              <td>The list of pageviews per day</td>
+              <td>The list of pageedits between start and end and their deltas</td>
             </tr>
           </tbody>
         </table>

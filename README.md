@@ -29,7 +29,9 @@ WikipediaTools.WIKIMUTUALLINKS(article);
 
 WikipediaTools.WIKIGEOCOORDINATES(article);
 
-WikipediaTools.WIKIPAGEVIEWS(article, start, end);
+WikipediaTools.WIKIPAGEVIEWS(article, opt_start, opt_end);
+
+WikipediaTools.WIKIPAGEEDITS(article, opt_start, opt_end);
 
 WikipediaTools.WIKIDATAFACTS(article);
 
@@ -75,8 +77,12 @@ function WIKIGEOCOORDINATES(article) {
   return WikipediaTools.WIKIGEOCOORDINATES(article);
 }
 
-function WIKIPAGEVIEWS(article, start, end) {
-  return WikipediaTools.WIKIPAGEVIEWS(article, start, end);
+function WIKIPAGEVIEWS(article, opt_start, opt_end) {
+  return WikipediaTools.WIKIPAGEVIEWS(article, opt_start, opt_end);
+}
+
+function WIKIPAGEEDITS(article, opt_start, opt_end) {
+  return WikipediaTools.WIKIPAGEEDITS(article, opt_start, opt_end);
 }
 
 function WIKIDATAFACTS(article) {
