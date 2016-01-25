@@ -191,7 +191,7 @@ function WIKICATEGORYMEMBERS(category) {
   var results = [];
   try {
     var language = category.split(/:(.+)?/)[0];
-    var title = category.split(/:(.+)?/)[1] + ':' + category.split(/:(.+)?/)[2];
+    var title = category.split(/:(.+)?/)[1];
     if (!title) {
       return '';
     }
@@ -232,7 +232,7 @@ function WIKISUBCATEGORIES(category) {
   var results = [];
   try {
     var language = category.split(/:(.+)?/)[0];
-    var title = category.split(/:(.+)?/)[1] + ':' + category.split(/:(.+)?/)[2];
+    var title = category.split(/:(.+)?/)[1];
     if (!title) {
       return '';
     }
