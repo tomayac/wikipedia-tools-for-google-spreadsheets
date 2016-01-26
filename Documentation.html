@@ -8,18 +8,29 @@
   'text/css'>
   <style type="text/css">
     html {box-sizing: border-box;}
+    body {max-width: 285px !important; min-width: 285px !important;}
     *, *:before, *:after {box-sizing: inherit;}
-    td {padding: 6px 0 !important;}
-    body {max-width: 300px !important;min-width: initial !important;};
-    div.c7 {margin-left:0}
+    h2 {font-size: 20px !important;}
+    h2::after {
+     content: "△ top" !important;
+     color: gray;
+     font-size: 0.5em;
+     display: initial !important;
+     position: relative !important;
+     top: -2em;
+     cursor: pointer;
+     word-wrap: nowrap !important;
+    }
+    table.c4 {table-layout: fixed;}
     th.c6 {width: 80%;}
     th.c5 {width: 20%;}
-    table.c4 {max-width: 300px !important;width: 300px !important;}
     th.c3 {width: 65%;}
     th.c2 {width: 15%;}
-    th.c1 {wdith: 20%;}
+    th.c1 {width: 20%;}
+    td {padding: 6px 0 !important; word-break: break-word;}
+    div.c7 {margin-left:0;}
     #gc-main {padding:0;}
-    #gc-content {margin-left: 1em !important;max-width: 300px !important;}
+    #gc-content {margin-left: 0 !important; max-width: 285px !important; overflow-x: hidden;}
   </style>
 </head>
 <body class="two-column docs">
@@ -27,7 +38,8 @@
     <div id="gc-main" class="main">
       <div id="gc-content" class="c7">
         <h1 class="page_title">Wikipedia Tools</h1>
-        <h2>WIKIPAGEVIEWS(string article, string opt_start, string opt_end)</h2>
+        <select id="functionSelect"></select>
+        <h2>WIKIPAGEVIEWS</h2>
         <p>Returns Wikipedia pageviews statistics for a Wikipedia article</p>
         <h3>Arguments:</h3>
         <table class="c4">
@@ -70,7 +82,7 @@
             </tr>
           </tbody>
         </table>
-        <h2>WIKIPAGEEDITS(string article, string opt_start, string opt_end)</h2>
+        <h2>WIKIPAGEEDITS</h2>
         <p>Wikipedia pageedits statistics for a Wikipedia article</p>
         <h3>Arguments:</h3>
         <table class="c4">
@@ -113,7 +125,7 @@
             </tr>
           </tbody>
         </table>
-        <h2>WIKICATEGORYMEMBERS(string category)</h2>
+        <h2>WIKICATEGORYMEMBERS</h2>
         <p>Returns Wikipedia category members for a Wikipedia category</p>
         <h3>Arguments:</h3>
         <table class="c4">
@@ -144,7 +156,7 @@
             </tr>
           </tbody>
         </table>
-        <h2>WIKIOUTBOUNDLINKS(string article)</h2>
+        <h2>WIKIOUTBOUNDLINKS</h2>
         <p>Returns Wikipedia outbound links for a Wikipedia article</p>
         <h3>Arguments:</h3>
         <table class="c4">
@@ -175,7 +187,7 @@
             </tr>
           </tbody>
         </table>
-        <h2>WIKISYNONYMS(string article)</h2>
+        <h2>WIKISYNONYMS</h2>
         <p>Returns Wikipedia synonyms (redirects) for a Wikipedia article</p>
         <h3>Arguments:</h3>
         <table class="c4">
@@ -206,7 +218,7 @@
             </tr>
           </tbody>
         </table>
-        <h2>WIKITRANSLATE(string article, Array&lt;string&gt;= opt_targetLanguages)</h2>
+        <h2>WIKITRANSLATE</h2>
         <p>Returns Wikipedia translations (language links) for a Wikipedia article</p>
         <h3>Arguments:</h3>
         <table class="c4">
@@ -242,7 +254,7 @@
             </tr>
           </tbody>
         </table>
-        <h2>WIKIEXPAND(string article, Array&lt;string&gt;= opt_targetLanguages)</h2>
+        <h2>WIKIEXPAND</h2>
         <p>Returns Wikipedia translations (language links) and synonyms (redirects) for a Wikipedia
         article</p>
         <h3>Arguments:</h3>
@@ -279,7 +291,7 @@
             </tr>
           </tbody>
         </table>
-        <h2>WIKIMUTUALLINKS(string article)</h2>
+        <h2>WIKIMUTUALLINKS</h2>
         <p>Returns Wikipedia mutual links, i.e, the intersection of inbound and outbound links for
         a Wikipedia article</p>
         <h3>Arguments:</h3>
@@ -311,7 +323,7 @@
             </tr>
           </tbody>
         </table>
-        <h2>WIKISUBCATEGORIES(string category)</h2>
+        <h2>WIKISUBCATEGORIES</h2>
         <p>Returns Wikipedia subcategories for a Wikipedia category</p>
         <h3>Arguments:</h3>
         <table class="c4">
@@ -342,7 +354,7 @@
             </tr>
           </tbody>
         </table>
-        <h2>WIKIDATAFACTS(string article)</h2>
+        <h2>WIKIDATAFACTS</h2>
         <p>Returns Wikidata facts for a Wikipedia article</p>
         <h3>Arguments:</h3>
         <table class="c4">
@@ -373,7 +385,7 @@
             </tr>
           </tbody>
         </table>
-        <h2>WIKIINBOUNDLINKS(string article)</h2>
+        <h2>WIKIINBOUNDLINKS</h2>
         <p>Returns Wikipedia inbound links for a Wikipedia article</p>
         <h3>Arguments:</h3>
         <table class="c4">
@@ -404,7 +416,7 @@
             </tr>
           </tbody>
         </table>
-        <h2>WIKIGEOCOORDINATES(string article)</h2>
+        <h2>WIKIGEOCOORDINATES</h2>
         <p>Returns Wikipedia geocoordinates for a Wikipedia article</p>
         <h3>Arguments:</h3>
         <table class="c4">
@@ -438,5 +450,32 @@
       </div>
     </div>
   </div>
+  <script>
+    (function createNavigation() {
+
+      var toTop = function(e) {
+        if (e.offsetY <= 0) {
+          window.location.hash = 'gc-wrapper';
+        }
+      };
+
+      var select = document.querySelector('#functionSelect');
+      var functions = document.querySelectorAll('h2');
+      for (var i = 0, lenI = functions.length; i < lenI; i++) {
+        var header = functions[i];
+        header.addEventListener('click', toTop);
+        var functionName = header.textContent;
+        header.id = functionName;
+        var option = document.createElement('option');
+        option.textContent = functionName;
+        option.value = functionName;
+        select.appendChild(option);
+      }
+
+      select.addEventListener('input', function() {
+        window.location.hash = select.options[select.selectedIndex].value;
+      });
+    })();
+  </script>
 </body>
 </html>
