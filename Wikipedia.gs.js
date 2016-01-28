@@ -715,17 +715,17 @@ function onInstall() {
   onOpen();
 }
 
-function onOpen() {
+function onOpen(e) {
   'use strict';
   SpreadsheetApp.getUi().createAddonMenu()
-      .addItem('Show sidebar', 'showSidebar_')
+      .addItem('Show documentation', 'showDocumentation_')
       .addToUi();
 }
 
 /**
  * Shows a sidebar with help
  */
-function showSidebar_() {
+function showDocumentation_() {
   'use strict';
   var html = HtmlService.createHtmlOutputFromFile('Documentation')
       .setSandboxMode(HtmlService.SandboxMode.IFRAME)
