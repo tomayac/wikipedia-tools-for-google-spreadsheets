@@ -715,7 +715,7 @@ function onInstall() {
   onOpen();
 }
 
-function onOpen(e) {
+function onOpen() {
   'use strict';
   SpreadsheetApp.getUi().createAddonMenu()
       .addItem('Show documentation', 'showDocumentation_')
