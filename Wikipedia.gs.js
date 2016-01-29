@@ -430,7 +430,7 @@ function WIKIDATAFACTS(article) {
     }
     var datatype = mainsnak.datatype;
     var datavalue = mainsnak.datavalue;
-    if (datavalue === null) {
+    if (datavalue === null || datavalue === undefined) {
       return null;
     }
     switch (datatype) {
