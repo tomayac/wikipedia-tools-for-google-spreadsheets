@@ -19,6 +19,8 @@
 /* jshint -W004 */
 /* jshint loopfunc: true */
 
+var HEADERS = {headers : {'Cache-Control' : 'max-age=0'}};
+
 /**
  * Returns Wikipedia synonyms (redirects) for a Wikipedia article
  *
@@ -45,7 +47,7 @@ function WIKISYNONYMS(article) {
         '&bllimit=max' +
         '&format=xml' +
         '&bltitle=' + encodeURIComponent(title.replace(/\s/g, '_'));
-    var xml = UrlFetchApp.fetch(url).getContentText();
+    var xml = UrlFetchApp.fetch(url, HEADERS).getContentText();
     var document = XmlService.parse(xml);
     var entries = document.getRootElement().getChild('query')
         .getChild('backlinks').getChildren('bl');
@@ -100,7 +102,7 @@ function WIKITRANSLATE(article, opt_targetLanguages, opt_returnAsObject,
         '&format=xml' +
         '&lllimit=max' +
         '&titles=' + encodeURIComponent(title.replace(/\s/g, '_'));
-    var xml = UrlFetchApp.fetch(url).getContentText();
+    var xml = UrlFetchApp.fetch(url, HEADERS).getContentText();
     var document = XmlService.parse(xml);
     var entries = document.getRootElement().getChild('query').getChild('pages')
         .getChild('page').getChild('langlinks').getChildren('ll');
@@ -204,7 +206,7 @@ function WIKICATEGORYMEMBERS(category) {
         '&format=xml' +
         '&cmnamespace=0' +
         '&cmtitle=' + encodeURIComponent(title.replace(/\s/g, '_'));
-    var xml = UrlFetchApp.fetch(url).getContentText();
+    var xml = UrlFetchApp.fetch(url, HEADERS).getContentText();
     var document = XmlService.parse(xml);
     var entries = document.getRootElement().getChild('query')
         .getChild('categorymembers').getChildren('cm');
@@ -245,7 +247,7 @@ function WIKISUBCATEGORIES(category) {
         '&format=xml' +
         '&cmnamespace=14' +
         '&cmtitle=' + encodeURIComponent(title.replace(/\s/g, '_'));
-    var xml = UrlFetchApp.fetch(url).getContentText();
+    var xml = UrlFetchApp.fetch(url, HEADERS).getContentText();
     var document = XmlService.parse(xml);
     var entries = document.getRootElement().getChild('query')
         .getChild('categorymembers').getChildren('cm');
@@ -284,7 +286,7 @@ function WIKIINBOUNDLINKS(article) {
         '&blnamespace=0' +
         '&format=xml' +
         '&bltitle=' + encodeURIComponent(title.replace(/\s/g, '_'));
-    var xml = UrlFetchApp.fetch(url).getContentText();
+    var xml = UrlFetchApp.fetch(url, HEADERS).getContentText();
     var document = XmlService.parse(xml);
     var entries = document.getRootElement().getChild('query')
         .getChild('backlinks').getChildren('bl');
@@ -323,7 +325,7 @@ function WIKIOUTBOUNDLINKS(article) {
         '&format=xml' +
         '&pllimit=max' +
         '&titles=' + encodeURIComponent(title.replace(/\s/g, '_'));
-    var xml = UrlFetchApp.fetch(url).getContentText();
+    var xml = UrlFetchApp.fetch(url, HEADERS).getContentText();
     var document = XmlService.parse(xml);
     var entries = document.getRootElement().getChild('query').getChild('pages')
         .getChild('page').getChild('links').getChildren('pl');
@@ -378,7 +380,7 @@ function WIKIGEOCOORDINATES(article) {
         '&colimit=max' +
         '&coprimary=primary' +
         '&titles=' + encodeURIComponent(title.replace(/\s/g, '_'));
-    var xml = UrlFetchApp.fetch(url).getContentText();
+    var xml = UrlFetchApp.fetch(url, HEADERS).getContentText();
     var document = XmlService.parse(xml);
     var coordinates = document.getRootElement().getChild('query')
         .getChild('pages').getChild('page').getChild('coordinates')
@@ -466,7 +468,7 @@ function WIKIDATAFACTS(article) {
             '&format=json' +
             '&props=labels' +
             '&ids=' + chunk.join('%7C');
-        var json = JSON.parse(UrlFetchApp.fetch(url).getContentText());
+        var json = JSON.parse(UrlFetchApp.fetch(url, HEADERS).getContentText());
         var entities = json.entities;
         chunk.forEach(function(item) {
           if ((entities[item]) &&
@@ -501,7 +503,7 @@ function WIKIDATAFACTS(article) {
         '&format=json' +
         '&props=claims' +
         '&titles=' + encodeURIComponent(title.replace(/\s/g, '_'));
-    var json = JSON.parse(UrlFetchApp.fetch(url).getContentText());
+    var json = JSON.parse(UrlFetchApp.fetch(url, HEADERS).getContentText());
     var entity = Object.keys(json.entities)[0];
     var qids = [];
     var simplifiedClaims = simplifyClaims(json.entities[entity].claims);
@@ -576,7 +578,7 @@ function WIKIPAGEVIEWS(article, opt_start, opt_end) {
         '/daily' +
         '/' + opt_start +
         '/' + opt_end;
-    var json = JSON.parse(UrlFetchApp.fetch(url).getContentText());
+    var json = JSON.parse(UrlFetchApp.fetch(url, HEADERS).getContentText());
     json.items.forEach(function(item) {
       var timestamp = item.timestamp
           .replace(/^(\d{4})(\d{2})(\d{2})(\d{2})$/, '$1-$2-$3-$4').split('-');
@@ -649,7 +651,7 @@ function WIKIPAGEEDITS(article, opt_start, opt_end) {
         '&rvstart=' + opt_end + // Reversed on purpose due to confusing API name
         '&rvend=' + opt_start + // Reversed on purpose due to confusing API name
         '&titles=' + encodeURIComponent(title.replace(/\s/g, '_'));
-    var xml = UrlFetchApp.fetch(url).getContentText();
+    var xml = UrlFetchApp.fetch(url, HEADERS).getContentText();
     var document = XmlService.parse(xml);
     var entries = document.getRootElement().getChild('query').getChild('pages')
         .getChild('page').getChild('revisions').getChildren('rev');
@@ -696,7 +698,7 @@ function GOOGLESUGGEST(keyword, opt_language) {
         '?output=toolbar' +
         '&hl=' + opt_language +
         '&q=' + encodeURIComponent(keyword);
-    var xml = UrlFetchApp.fetch(url).getContentText();
+    var xml = UrlFetchApp.fetch(url, HEADERS).getContentText();
     var document = XmlService.parse(xml);
     var entries = document.getRootElement().getChildren('CompleteSuggestion');
     for (var i = 0; i < entries.length; i++) {
