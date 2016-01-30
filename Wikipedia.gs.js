@@ -19,7 +19,7 @@
 /* jshint -W004 */
 /* jshint loopfunc: true */
 
-var HEADERS = {headers : {'Cache-Control' : 'max-age=0'}};
+var HEADERS = {headers: {'Cache-Control': 'max-age=0'}};
 
 /**
  * Returns Wikipedia synonyms (redirects) for a Wikipedia article
