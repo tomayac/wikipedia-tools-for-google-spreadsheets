@@ -403,10 +403,11 @@ function WIKIGEOCOORDINATES(article) {
  * Returns Wikidata facts for a Wikipedia article.
  *
  * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get Wikidata facts for.
+ * @param {string=} opt_multiObjectMode Whether to return all object values (pass "all") or just the first (pass "first") when there are more than one object values (optional).
  * @return {Array<string>} The list of Wikidata facts.
  * @customfunction
  */
-function WIKIDATAFACTS(article) {
+function WIKIDATAFACTS(article, opt_multiObjectMode) {
   'use strict';
 
   var simplifyClaims = function(claims) {
@@ -526,6 +527,23 @@ function WIKIDATAFACTS(article) {
         if (label && value) {
           results.push([label, value]);
         }
+      }
+      // Optionally return multi-object facts
+      if ((
+            (/^first$/i.test(opt_multiObjectMode)) ||
+            (/^all$/i.test(opt_multiObjectMode))
+          ) && (claims.length > 1)) {
+        var label = labels[claim];
+        claims.forEach(function(claimObject, i) {
+          if (i > 0 && /^first$/i.test(opt_multiObjectMode)) {
+            return;
+          }
+          var value = /^Q\d+$/.test(claimObject) ?
+              labels[claimObject] : claimObject;
+          if (label && value) {
+            results.push([label, value]);
+          }
+        });
       }
     }
   } catch (e) {
