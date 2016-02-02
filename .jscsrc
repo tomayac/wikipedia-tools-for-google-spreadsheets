@@ -1,0 +1,11 @@
+{
+  "preset": "google",
+  "jsDoc": {
+    "checkAnnotations": {
+      "preset": "jsdoc3",
+      "extra": {
+        "customfunction": false
+      }
+    }
+  }
+}

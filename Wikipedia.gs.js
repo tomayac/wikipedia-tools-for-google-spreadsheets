@@ -15,10 +15,6 @@
  * limitations under the License.
  */
 
-/* globals UrlFetchApp, XmlService */
-/* jshint -W004 */
-/* jshint loopfunc: true */
-
 var HEADERS = {headers: {'Cache-Control': 'max-age=0'}};
 
 /**
@@ -26,6 +22,7 @@ var HEADERS = {headers: {'Cache-Control': 'max-age=0'}};
  *
  * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get synonyms for
  * @return {Array<string>} The list of synonyms
+ * @customfunction
  */
 function WIKISYNONYMS(article) {
   'use strict';
@@ -69,6 +66,7 @@ function WIKISYNONYMS(article) {
  * @param {boolean=} opt_returnAsObject Whether to return the results as an object, defaults to false (optional)
  * @param {boolean=} opt_skipHeader Whether to skip the header, defaults to false (optional)
  * @return {Array<string>} The list of translations
+ * @customfunction
  */
 function WIKITRANSLATE(article, opt_targetLanguages, opt_returnAsObject,
     opt_skipHeader) {
@@ -127,9 +125,9 @@ function WIKITRANSLATE(article, opt_targetLanguages, opt_returnAsObject,
   for (var lang in results) {
     if (opt_skipHeader) {
       arrayResults.push(results[lang]);
-     } else {
-       arrayResults.push([lang, results[lang]]);
-     }
+    } else {
+      arrayResults.push([lang, results[lang]]);
+    }
   }
   return arrayResults.length > 0 ? arrayResults : '';
 }
@@ -141,6 +139,7 @@ function WIKITRANSLATE(article, opt_targetLanguages, opt_returnAsObject,
  * @param {Array<string>=} opt_targetLanguages The list of languages to limit the results to (optional)
  * @param {boolean=} opt_returnAsObject Whether to return the results as an object, defaults to false (optional)
  * @return {Array<string>} The list of translations and synonyms
+ * @customfunction
  */
 function WIKIEXPAND(article, opt_targetLanguages, opt_returnAsObject) {
   'use strict';
@@ -184,6 +183,7 @@ function WIKIEXPAND(article, opt_targetLanguages, opt_returnAsObject) {
  *
  * @param {string} category The Wikipedia category in the format "language:Category_Title" ("en:Category:Visitor_attractions_in_Berlin") to get members for
  * @return {Array<string>} The list of category members
+ * @customfunction
  */
 function WIKICATEGORYMEMBERS(category) {
   'use strict';
@@ -225,6 +225,7 @@ function WIKICATEGORYMEMBERS(category) {
  *
  * @param {string} category The Wikipedia category in the format "language:Category_Title" ("en:Category:Visitor_attractions_in_Berlin") to get subcategories for
  * @return {Array<string>} The list of subcategories
+ * @customfunction
  */
 function WIKISUBCATEGORIES(category) {
   'use strict';
@@ -266,6 +267,7 @@ function WIKISUBCATEGORIES(category) {
  *
  * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get inbound links for
  * @return {Array<string>} The list of inbound links
+ * @customfunction
  */
 function WIKIINBOUNDLINKS(article) {
   'use strict';
@@ -305,6 +307,7 @@ function WIKIINBOUNDLINKS(article) {
  *
  * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get outbound links for
  * @return {Array<string>} The list of outbound links
+ * @customfunction
  */
 function WIKIOUTBOUNDLINKS(article) {
   'use strict';
@@ -344,6 +347,7 @@ function WIKIOUTBOUNDLINKS(article) {
  *
  * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get mutual links for
  * @return {Array<string>} The list of mutual links
+ * @customfunction
  */
 function WIKIMUTUALLINKS(article) {
   'use strict';
@@ -360,6 +364,7 @@ function WIKIMUTUALLINKS(article) {
  *
  * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get geocoordinates for
  * @return {Array<number>} The latitude and longitude
+ * @customfunction
  */
 function WIKIGEOCOORDINATES(article) {
   'use strict';
@@ -399,6 +404,7 @@ function WIKIGEOCOORDINATES(article) {
  *
  * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get Wikidata facts for
  * @return {Array<string>} The list of Wikidata facts
+ * @customfunction
  */
 function WIKIDATAFACTS(article) {
   'use strict';
@@ -535,6 +541,7 @@ function WIKIDATAFACTS(article) {
  * @param {string=} start The start date in the format "YYYYMMDD" ("2007-06-08") since when pageviews statistics should be retrieved from (optional)
  * @param {string=} end The end date in the format "YYYYMMDD" ("2007-06-08") until when pageviews statistics should be retrieved to (optional)
  * @return {Array<number>} The list of pageviews between start and end per day
+ * @customfunction
  */
 function WIKIPAGEVIEWS(article, opt_start, opt_end) {
   'use strict';
@@ -608,6 +615,7 @@ function WIKIPAGEVIEWS(article, opt_start, opt_end) {
  * @param {string=} start The start date in the format "YYYYMMDD" ("2007-06-08") since when pageedits statistics should be retrieved from (optional)
  * @param {string=} end The end date in the format "YYYYMMDD" ("2007-06-08") until when pageedits statistics should be retrieved to (optional)
  * @return {Array<number>} The list of pageedits between start and end and their deltas
+ * @customfunction
  */
 function WIKIPAGEEDITS(article, opt_start, opt_end) {
   'use strict';
@@ -685,6 +693,7 @@ function WIKIPAGEEDITS(article, opt_start, opt_end) {
  * @param {string} keyword The keyword to get suggestions for
  * @param {string=} opt_language The language to get suggestions in, defaults to "en" (optional)
  * @return {Array<string>} The list of suggestions
+ * @customfunction
  */
 function GOOGLESUGGEST(keyword, opt_language) {
   'use strict';

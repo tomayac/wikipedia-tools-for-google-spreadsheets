@@ -1,0 +1,5 @@
+{
+  "predef": ["UrlFetchApp", "XmlService"],
+  "-W004": true,
+  "loopfunc": true
+}
