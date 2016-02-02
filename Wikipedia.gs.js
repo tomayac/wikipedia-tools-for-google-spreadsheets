@@ -538,8 +538,8 @@ function WIKIDATAFACTS(article) {
  * Returns Wikipedia pageviews statistics for a Wikipedia article
  *
  * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get pageviews statistics for
- * @param {string=} start The start date in the format "YYYYMMDD" ("2007-06-08") since when pageviews statistics should be retrieved from (optional)
- * @param {string=} end The end date in the format "YYYYMMDD" ("2007-06-08") until when pageviews statistics should be retrieved to (optional)
+ * @param {string=} opt_start The start date in the format "YYYYMMDD" ("2007-06-08") since when pageviews statistics should be retrieved from (optional)
+ * @param {string=} opt_end The end date in the format "YYYYMMDD" ("2007-06-08") until when pageviews statistics should be retrieved to (optional)
  * @return {Array<number>} The list of pageviews between start and end per day
  * @customfunction
  */
@@ -612,8 +612,8 @@ function WIKIPAGEVIEWS(article, opt_start, opt_end) {
  * Returns Wikipedia pageedits statistics for a Wikipedia article
  *
  * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get pageedits statistics for
- * @param {string=} start The start date in the format "YYYYMMDD" ("2007-06-08") since when pageedits statistics should be retrieved from (optional)
- * @param {string=} end The end date in the format "YYYYMMDD" ("2007-06-08") until when pageedits statistics should be retrieved to (optional)
+ * @param {string=} opt_start The start date in the format "YYYYMMDD" ("2007-06-08") since when pageedits statistics should be retrieved from (optional)
+ * @param {string=} opt_end The end date in the format "YYYYMMDD" ("2007-06-08") until when pageedits statistics should be retrieved to (optional)
  * @return {Array<number>} The list of pageedits between start and end and their deltas
  * @customfunction
  */
