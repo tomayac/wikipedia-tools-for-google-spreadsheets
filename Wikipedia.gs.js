@@ -446,6 +446,8 @@ function WIKIDATAFACTS(article, opt_multiObjectMode) {
       case 'string':
       case 'commonsMedia':
       case 'url':
+      case 'math':
+      case 'external-id':
         return datavalue.value;
       case 'monolingualtext':
         return datavalue.value.text;
