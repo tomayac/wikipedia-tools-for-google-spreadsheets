@@ -1,6 +1,8 @@
 # Wikipedia Tools for Google Spreadsheets
 A couple of Wikipedia utilities for use in Google Spreadsheets.
 
+![Wikipedia Tools for Google Spreadsheets](https://lh3.googleusercontent.com/K_SEDvOrgATTpLMMFCHhfjeH2Cgn05lyu0dmFcrZVNwErD2RQMxNLsJ-AG8QQgQsO1h1zi5-3qudgMi-Cs12MuW_rmE "Wikipedia Tools for Google Spreadsheets")
+
 ## Documentation
 See the [documentation](https://script.google.com/macros/library/versions/d/MGZfQ_cBpwsvTDk_-3Pp5ZWGKoUaL1Yht)
 sorted by version (choose the latest stable release).
