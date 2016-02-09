@@ -1,486 +1,597 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <title>Wikipedia Tools</title>
-  <link rel="stylesheet" type="text/css" href=
-  "https://developers.google.com/_static/css/screen-docs.css">
-  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400' rel='stylesheet' type=
-  'text/css'>
-  <style type="text/css">
+  <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+  <style>
     html {box-sizing: border-box;}
-    *, *:before, *:after {box-sizing: inherit;}
-    body {max-width: 285px !important; min-width: 285px !important;}
-    h2 {font-size: 20px !important;}
-    h2::after {
-     content: "△ top" !important;
-     color: gray;
-     font-size: 0.5em;
-     display: initial !important;
-     position: relative !important;
-     top: -2em;
-     cursor: pointer;
-     word-wrap: nowrap !important;
-    }
-    table.c4 {table-layout: fixed;}
-    th.c6 {width: 80%;}
-    th.c5 {width: 20%;}
-    th.c3 {width: 65%;}
-    th.c2 {width: 15%;}
-    th.c1 {width: 20%;}
-    td {padding: 6px 0 !important; word-break: break-word;}
-    div.c7 {margin-left:0;}
-    #gc-main {padding:0;}
-    #gc-content {margin-left: 0 !important; max-width: 285px !important; overflow-x: hidden;}
+    *, *::before, *::after {box-sizing: inherit;}
+    main {width: 285px; max-width: 285px; min-width: 285px; padding: .1em;}
+    h2 {color: #6199DF;}
+    h2::after {background: #ddd; content: ""; display: block; height: 1px; margin-top: .5em;}
+    select {width: 100%;}
+    section {display: none;}
+    table {table-layout: fixed; width: 100%; border: solid 1px #ddd; border-spacing: 0; border-collapse: collapse;}
+    td, th {padding: .1em; font-size: smaller;}
+    th {border: 1px solid #4d90fe; background-color: #6199DF; color: white;}
+    td {border: 1px solid #ddd; vertical-align: top;}
+    code {color: green; white-space: pre;}
+    .code-example {border: solid 1px #ccc; padding: .1em; font-weight: bold; background-color: #FFF5EE;}
+    .code-result {border: solid 1px #bbb; padding: .1em; background-color: #FFF5EE; text-overflow: ellipsis;}
+    .inline-code {font-family: monospace; color: green;}
   </style>
 </head>
-<body class="two-column docs">
-  <div id="gc-wrapper">
-    <div id="gc-main" class="main">
-      <div id="gc-content" class="c7">
-        <h1 class="page_title">Wikipedia Tools</h1>
-        <select id="functionSelect"></select>
-        <h2>WIKIPAGEVIEWS</h2>
-        <p>Returns Wikipedia pageviews statistics for a Wikipedia article</p>
-        <h3>Arguments:</h3>
-        <table class="c4">
+<body>
+  <main>
+    <h1>Wikipedia Tools</h1>
+    <select id="functionSelect"></select>
+    <section>
+      <h2>WIKIPAGEVIEWS</h2>
+      <p>Returns Wikipedia pageviews statistics for a Wikipedia article.</p>
+      <h3>Arguments</h3>
+      <table>
+        <tbody>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Type</th>
+            <th scope="col">Description</th>
+          </tr>
+          <tr>
+            <td>article</td>
+            <td><code>string</code></td>
+            <td>The Wikipedia article in to get
+            pageviews statistics for.</td>
+          </tr>
+          <tr>
+            <td>opt_start</td>
+            <td><code>string</code></td>
+            <td>The start date since when pageviews
+            statistics should be retrieved from (optional).</td>
+          </tr>
+          <tr>
+            <td>opt_end</td>
+            <td><code>string</code></td>
+            <td>The end date until when pageviews
+            statistics should be retrieved to (optional).</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>Return Values</h3>
+      <table>
+        <tbody>
+          <tr>
+            <th scope="col">Type</th>
+            <th scope="col">Description</th>
+          </tr>
+          <tr>
+            <td><code>Array&lt;number&gt;</code></td>
+            <td>The list of pageviews between start and end per day.</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>Example</h3>
+      <pre class="code-example"><code>=WIKIPAGEVIEWS(
+  "de:Berlin",
+  TODAY() - 2,
+  TODAY()
+)</code></pre>
+      <pre class="code-result"><code>February 7, 2016&#9;5173
+February 6, 2016&#9;4613
+February 5, 2016&#9;6168</code></pre>
+    </section>
+    <section>
+      <h2>WIKIPAGEEDITS</h2>
+        <p>Returns Wikipedia pageedits statistics for a Wikipedia article.</p>
+        <h3>Arguments</h3>
+        <table>
           <tbody>
             <tr>
-              <th scope="col" class="c1">Name</th>
-              <th scope="col" class="c2">Type</th>
-              <th scope="col" class="c3">Description</th>
+              <th scope="col">Name</th>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
             </tr>
             <tr>
               <td>article</td>
               <td><code>string</code></td>
-              <td>The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get
-              pageviews statistics for</td>
+              <td>The Wikipedia article to get
+              pageviews statistics for.</td>
             </tr>
             <tr>
               <td>opt_start</td>
               <td><code>string</code></td>
-              <td>The start date in the format "YYYYMMDD" ("2007-06-08") since when pageviews
-              statistics should be retrieved from (optional)</td>
-            </tr>
-            <tr>
-              <td>opt_end</td>
-              <td><code>string</code></td>
-              <td>The end date in the format "YYYYMMDD" ("2007-06-08") until when pageviews
-              statistics should be retrieved to (optional)</td>
-            </tr>
-          </tbody>
-        </table>
-        <h3>Return Values:</h3>
-        <table class="c4">
-          <tbody>
-            <tr>
-              <th scope="col" class="c5">Type</th>
-              <th scope="col" class="c6">Description</th>
-            </tr>
-            <tr>
-              <td><code>Array&lt;number&gt;</code></td>
-              <td>The list of pageviews between start and end per day</td>
-            </tr>
-          </tbody>
-        </table>
-        <h2>WIKIPAGEEDITS</h2>
-        <p>Returns Wikipedia pageedits statistics for a Wikipedia article</p>
-        <h3>Arguments:</h3>
-        <table class="c4">
-          <tbody>
-            <tr>
-              <th scope="col" class="c1">Name</th>
-              <th scope="col" class="c2">Type</th>
-              <th scope="col" class="c3">Description</th>
-            </tr>
-            <tr>
-              <td>article</td>
-              <td><code>string</code></td>
-              <td>The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get
-              pageviews statistics for</td>
-            </tr>
-            <tr>
-              <td>opt_start</td>
-              <td><code>string</code></td>
-              <td>The start date in the format "YYYYMMDD" ("2007-06-08") since when pageedits
-              statistics should be retrieved from (optional)</td>
+              <td>The start date since when pageedits
+              statistics should be retrieved from (optional).</td>
             </tr>
             <tr>
               <td>end</td>
               <td><code>string</code></td>
-              <td>The end date in the format "YYYYMMDD" ("2007-06-08") until when pageedits
-              statistics should be retrieved to</td>
+              <td>The end date until when pageedits
+              statistics should be retrieved to.</td>
             </tr>
           </tbody>
         </table>
-        <h3>Return Values:</h3>
-        <table class="c4">
+        <h3>Return Values</h3>
+        <table>
           <tbody>
             <tr>
-              <th scope="col" class="c5">Type</th>
-              <th scope="col" class="c6">Description</th>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
             </tr>
             <tr>
               <td><code>Array&lt;number&gt;</code></td>
-              <td>The list of pageedits between start and end and their deltas</td>
+              <td>The list of pageedits between start and end and their deltas.</td>
             </tr>
           </tbody>
         </table>
+        <h3>Example</h3>
+      <pre class="code-example"><code>=WIKIPAGEEDITS(
+  "en:Berlin",
+  TODAY() - 2,
+  TODAY()
+)</code></pre>
+      <pre class="code-result"><code>February 7, 2016&#9;-5
+February 7, 2016&#9;-16
+February 6, 2016&#9;-17</code></pre>
+    </section>
+      <section>
         <h2>WIKICATEGORYMEMBERS</h2>
-        <p>Returns Wikipedia category members for a Wikipedia category</p>
-        <h3>Arguments:</h3>
-        <table class="c4">
+        <p>Returns Wikipedia category members for a Wikipedia category.</p>
+        <h3>Arguments</h3>
+        <table>
           <tbody>
             <tr>
-              <th scope="col" class="c1">Name</th>
-              <th scope="col" class="c2">Type</th>
-              <th scope="col" class="c3">Description</th>
+              <th scope="col">Name</th>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
             </tr>
             <tr>
               <td>category</td>
               <td><code>string</code></td>
-              <td>The Wikipedia category in the format "language:Category_Title"
-              ("en:Category:Visitor_attractions_in_Berlin") to get members for</td>
+              <td>The Wikipedia category to get members for.</td>
             </tr>
           </tbody>
         </table>
-        <h3>Return Values:</h3>
-        <table class="c4">
+        <h3>Return Values</h3>
+        <table>
           <tbody>
             <tr>
-              <th scope="col" class="c5">Type</th>
-              <th scope="col" class="c6">Description</th>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
             </tr>
             <tr>
               <td><code>Array&lt;string&gt;</code></td>
-              <td>The list of category members</td>
+              <td>The list of category members.</td>
             </tr>
           </tbody>
         </table>
+        <h3>Example</h3>
+      <pre class="code-example"><code>=WIKICATEGORYMEMBERS(
+  "en:Category:Berlin"
+)</code></pre>
+      <pre class="code-result"><code>Berlin
+Free Secession
+Intelexit
+…</code></pre>
+    </section>
+      <section>
         <h2>WIKIOUTBOUNDLINKS</h2>
-        <p>Returns Wikipedia outbound links for a Wikipedia article</p>
-        <h3>Arguments:</h3>
-        <table class="c4">
+        <p>Returns Wikipedia outbound links for a Wikipedia article.</p>
+        <h3>Arguments</h3>
+        <table>
           <tbody>
             <tr>
-              <th scope="col" class="c1">Name</th>
-              <th scope="col" class="c2">Type</th>
-              <th scope="col" class="c3">Description</th>
+              <th scope="col">Name</th>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
             </tr>
             <tr>
               <td>article</td>
               <td><code>string</code></td>
-              <td>The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get
-              outbound links for</td>
+              <td>The Wikipedia article to get
+              outbound links for.</td>
             </tr>
           </tbody>
         </table>
-        <h3>Return Values:</h3>
-        <table class="c4">
+        <h3>Return Values</h3>
+        <table>
           <tbody>
             <tr>
-              <th scope="col" class="c5">Type</th>
-              <th scope="col" class="c6">Description</th>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
             </tr>
             <tr>
               <td><code>Array&lt;string&gt;</code></td>
-              <td>The list of outbound links</td>
+              <td>The list of outbound links.</td>
             </tr>
           </tbody>
         </table>
+        <h3>Example</h3>
+      <pre class="code-example"><code>=WIKIOUTBOUNDLINKS(
+  "en:Berlin"
+)</code></pre>
+      <pre class="code-result"><code>1. FC Union Berlin
+1896 Summer Olympics
+1900 Summer Olympics
+…</code></pre>
+    </section>
+      <section>
         <h2>WIKISYNONYMS</h2>
-        <p>Returns Wikipedia synonyms (redirects) for a Wikipedia article</p>
-        <h3>Arguments:</h3>
-        <table class="c4">
+        <p>Returns Wikipedia synonyms (redirects) for a Wikipedia article.</p>
+        <h3>Arguments</h3>
+        <table>
           <tbody>
             <tr>
-              <th scope="col" class="c1">Name</th>
-              <th scope="col" class="c2">Type</th>
-              <th scope="col" class="c3">Description</th>
+              <th scope="col">Name</th>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
             </tr>
             <tr>
               <td>article</td>
               <td><code>string</code></td>
-              <td>The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get
-              synonyms for</td>
+              <td>The Wikipedia article to get
+              synonyms for.</td>
             </tr>
           </tbody>
         </table>
-        <h3>Return Values:</h3>
-        <table class="c4">
+        <h3>Return Values</h3>
+        <table>
           <tbody>
             <tr>
-              <th scope="col" class="c5">Type</th>
-              <th scope="col" class="c6">Description</th>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
             </tr>
             <tr>
               <td><code>Array&lt;string&gt;</code></td>
-              <td>The list of synonyms</td>
+              <td>The list of synonyms.</td>
             </tr>
           </tbody>
         </table>
+        <h3>Example</h3>
+      <pre class="code-example"><code>=WIKISYNONYMS("en:Berlin")</code></pre>
+      <pre class="code-result"><code>CityBerlin
+Berlin, Germany
+Capital of East Germany
+…</code></pre>
+    </section>
+      <section>
         <h2>WIKITRANSLATE</h2>
-        <p>Returns Wikipedia translations (language links) for a Wikipedia article</p>
-        <h3>Arguments:</h3>
-        <table class="c4">
+        <p>Returns Wikipedia translations (language links) for a Wikipedia article.</p>
+        <h3>Arguments</h3>
+        <table>
           <tbody>
             <tr>
-              <th scope="col" class="c1">Name</th>
-              <th scope="col" class="c2">Type</th>
-              <th scope="col" class="c3">Description</th>
+              <th scope="col">Name</th>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
             </tr>
             <tr>
               <td>article</td>
               <td><code>string</code></td>
-              <td>The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get
-              translations for</td>
+              <td>The Wikipedia article to get
+              translations for.</td>
             </tr>
             <tr>
-              <td>opt_targetLanguages</td>
+              <td>opt_targetLang</td>
               <td><code>Array&lt;string&gt;=</code></td>
-              <td>The list of languages to limit the results to (optional)</td>
+              <td>The list of languages to limit the results to (optional).</td>
             </tr>
           </tbody>
         </table>
-        <h3>Return Values:</h3>
-        <table class="c4">
+        <h3>Return Values</h3>
+        <table>
           <tbody>
             <tr>
-              <th scope="col" class="c5">Type</th>
-              <th scope="col" class="c6">Description</th>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
             </tr>
             <tr>
               <td><code>Array&lt;string&gt;</code></td>
-              <td>The list of translations</td>
+              <td>The list of translations.</td>
             </tr>
           </tbody>
         </table>
+        <h3>Example</h3>
+      <pre class="code-example"><code>=WIKITRANSLATE(
+  "en:Berlin"
+  {"ab"; "ace"; "af"}
+)</code></pre>
+      <pre class="code-result"><code>ab&#9;Берлин
+ace&#9;Berlin
+af&#9;Berlyn
+…</code></pre>
+    </section>
+      <section>
         <h2>WIKIEXPAND</h2>
         <p>Returns Wikipedia translations (language links) and synonyms (redirects) for a Wikipedia
-        article</p>
-        <h3>Arguments:</h3>
-        <table class="c4">
+        article.</p>
+        <h3>Arguments</h3>
+        <table>
           <tbody>
             <tr>
-              <th scope="col" class="c1">Name</th>
-              <th scope="col" class="c2">Type</th>
-              <th scope="col" class="c3">Description</th>
+              <th scope="col">Name</th>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
             </tr>
             <tr>
               <td>article</td>
               <td><code>string</code></td>
-              <td>The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get
-              translations and synonyms for</td>
+              <td>The Wikipedia article to get
+              translations and synonyms for.</td>
             </tr>
             <tr>
-              <td>opt_targetLanguages</td>
+              <td>opt_targetLang</td>
               <td><code>Array&lt;string&gt;=</code></td>
-              <td>The list of languages to limit the results to (optional)</td>
+              <td>The list of languages to limit the results to (optional).</td>
             </tr>
           </tbody>
         </table>
-        <h3>Return Values:</h3>
-        <table class="c4">
+        <h3>Return Values</h3>
+        <table>
           <tbody>
             <tr>
-              <th scope="col" class="c5">Type</th>
-              <th scope="col" class="c6">Description</th>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
             </tr>
             <tr>
               <td><code>Array&lt;string&gt;</code></td>
-              <td>The list of translations and synonyms</td>
+              <td>The list of translations and synonyms.</td>
             </tr>
           </tbody>
         </table>
+        <h3>Example</h3>
+      <pre class="code-example"><code>=WIKIEXPAND(
+  "en:Berlin",
+  {"fr"}
+)</code></pre>
+      <pre class="code-result"><code>fr&#9;en
+Berlin&#9;Berlin
+DE3&#9;CityBerlin
+&#9;Berlin, Germany
+&#9;Capital of East Germany
+…</code></pre>
+    </section>
+      <section>
         <h2>WIKIMUTUALLINKS</h2>
         <p>Returns Wikipedia mutual links, i.e, the intersection of inbound and outbound links for
-        a Wikipedia article</p>
-        <h3>Arguments:</h3>
-        <table class="c4">
+        a Wikipedia article.</p>
+        <h3>Arguments</h3>
+        <table>
           <tbody>
             <tr>
-              <th scope="col" class="c1">Name</th>
-              <th scope="col" class="c2">Type</th>
-              <th scope="col" class="c3">Description</th>
+              <th scope="col">Name</th>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
             </tr>
             <tr>
               <td>article</td>
               <td><code>string</code></td>
-              <td>The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get
-              mutual links for</td>
+              <td>The Wikipedia article to get
+              mutual links for.</td>
             </tr>
           </tbody>
         </table>
-        <h3>Return Values:</h3>
-        <table class="c4">
+        <h3>Return Values</h3>
+        <table>
           <tbody>
             <tr>
-              <th scope="col" class="c5">Type</th>
-              <th scope="col" class="c6">Description</th>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
             </tr>
             <tr>
               <td><code>Array&lt;string&gt;</code></td>
-              <td>The list of mutual links</td>
+              <td>The list of mutual links.</td>
             </tr>
           </tbody>
         </table>
+        <h3>Example</h3>
+      <pre class="code-example"><code>=WIKIMUTUALLINKS("en:Berlin")</code></pre>
+      <pre class="code-result"><code>Albert Einstein
+Ankara
+Amsterdam
+…</code></pre>
+    </section>
+      <section>
         <h2>WIKISUBCATEGORIES</h2>
-        <p>Returns Wikipedia subcategories for a Wikipedia category</p>
-        <h3>Arguments:</h3>
-        <table class="c4">
+        <p>Returns Wikipedia subcategories for a Wikipedia category.</p>
+        <h3>Arguments</h3>
+        <table>
           <tbody>
             <tr>
-              <th scope="col" class="c1">Name</th>
-              <th scope="col" class="c2">Type</th>
-              <th scope="col" class="c3">Description</th>
+              <th scope="col">Name</th>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
             </tr>
             <tr>
               <td>category</td>
               <td><code>string</code></td>
-              <td>The Wikipedia category in the format "language:Category_Title"
-              ("en:Category:Visitor_attractions_in_Berlin") to get subcategories for</td>
+              <td>The Wikipedia category to get subcategories for.</td>
             </tr>
           </tbody>
         </table>
-        <h3>Return Values:</h3>
-        <table class="c4">
+        <h3>Return Values</h3>
+        <table>
           <tbody>
             <tr>
-              <th scope="col" class="c5">Type</th>
-              <th scope="col" class="c6">Description</th>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
             </tr>
             <tr>
               <td><code>Array&lt;string&gt;</code></td>
-              <td>The list of subcategories</td>
+              <td>The list of subcategories.</td>
             </tr>
           </tbody>
         </table>
+        <h3>Example</h3>
+      <pre class="code-example"><code>=WIKISUBCATEGORIES(
+  "en:Category:Berlin"
+)</code></pre>
+      <pre class="code-result"><code>Category:Berlin ePrix
+Category:Culture in Berlin
+Category:Crime in Berlin
+…</code></pre>
+    </section>
+      <section>
         <h2>WIKIDATAFACTS</h2>
-        <p>Returns Wikidata facts for a Wikipedia article</p>
-        <h3>Arguments:</h3>
-        <table class="c4">
+        <p>Returns Wikidata facts for a Wikipedia article.</p>
+        <h3>Arguments</h3>
+        <table>
           <tbody>
             <tr>
-              <th scope="col" class="c1">Name</th>
-              <th scope="col" class="c2">Type</th>
-              <th scope="col" class="c3">Description</th>
+              <th scope="col">Name</th>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
             </tr>
             <tr>
               <td>article</td>
               <td><code>string</code></td>
-              <td>The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get
-              Wikidata facts for</td>
+              <td>The Wikipedia article to get
+              Wikidata facts for.</td>
             </tr>
             <tr>
-              <td>opt_multiObjectMode</td>
+              <td>opt_multiObj</td>
               <td><code>string=</code></td>
-              <td>Whether to return all object values (pass "all") or just the first (pass "first")
-              when there are more than one object values (optional)</td>
+              <td>Whether to return all object values (pass <span class="inline-code">all</span>) or just the first (pass <span class="inline-code">first</span>)
+              when there are more than one object values (optional).</td>
             </tr>
           </tbody>
         </table>
-        <h3>Return Values:</h3>
-        <table class="c4">
+        <h3>Return Values</h3>
+        <table>
           <tbody>
             <tr>
-              <th scope="col" class="c5">Type</th>
-              <th scope="col" class="c6">Description</th>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
             </tr>
             <tr>
               <td><code>Array&lt;string&gt;</code></td>
-              <td>The list of Wikidata facts</td>
+              <td>The list of Wikidata facts.</td>
             </tr>
           </tbody>
         </table>
+        <h3>Example</h3>
+      <pre class="code-example"><code>=WIKIDATAFACTS("en:Berlin")</code></pre>
+      <pre class="code-result"><code>highest point&#9;Arkenberge
+country&#9;&#9;Germany
+postal code&#9;10115–14199
+…</code></pre>
+    </section>
+      <section>
         <h2>WIKIINBOUNDLINKS</h2>
-        <p>Returns Wikipedia inbound links for a Wikipedia article</p>
-        <h3>Arguments:</h3>
-        <table class="c4">
+        <p>Returns Wikipedia inbound links for a Wikipedia article.</p>
+        <h3>Arguments</h3>
+        <table>
           <tbody>
             <tr>
-              <th scope="col" class="c1">Name</th>
-              <th scope="col" class="c2">Type</th>
-              <th scope="col" class="c3">Description</th>
+              <th scope="col">Name</th>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
             </tr>
             <tr>
               <td>article</td>
               <td><code>string</code></td>
-              <td>The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get
-              inbound links for</td>
+              <td>The Wikipedia article to get
+              inbound links for.</td>
             </tr>
           </tbody>
         </table>
-        <h3>Return Values:</h3>
-        <table class="c4">
+        <h3>Return Values</h3>
+        <table>
           <tbody>
             <tr>
-              <th scope="col" class="c5">Type</th>
-              <th scope="col" class="c6">Description</th>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
             </tr>
             <tr>
               <td><code>Array&lt;string&gt;</code></td>
-              <td>The list of inbound links</td>
+              <td>The list of inbound links.</td>
             </tr>
           </tbody>
         </table>
+        <h3>Example</h3>
+      <pre class="code-example"><code>=WIKIINBOUNDLINKS("en:Berlin")</code></pre>
+      <pre class="code-result"><code>Albert Einstein
+Ankara
+Amsterdam
+…</code></pre>
+    </section>
+      <section>
         <h2>WIKIGEOCOORDINATES</h2>
-        <p>Returns Wikipedia geocoordinates for a Wikipedia article</p>
-        <h3>Arguments:</h3>
-        <table class="c4">
+        <p>Returns Wikipedia geocoordinates for a Wikipedia article.</p>
+        <h3>Arguments</h3>
+        <table>
           <tbody>
             <tr>
-              <th scope="col" class="c1">Name</th>
-              <th scope="col" class="c2">Type</th>
-              <th scope="col" class="c3">Description</th>
+              <th scope="col">Name</th>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
             </tr>
             <tr>
               <td>article</td>
               <td><code>string</code></td>
-              <td>The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get
-              geocoordinates for</td>
+              <td>The Wikipedia article to get
+              geocoordinates for.</td>
             </tr>
           </tbody>
         </table>
-        <h3>Return Values:</h3>
-        <table class="c4">
+        <h3>Return Values</h3>
+        <table>
           <tbody>
             <tr>
-              <th scope="col" class="c5">Type</th>
-              <th scope="col" class="c6">Description</th>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
             </tr>
             <tr>
               <td><code>Array&lt;number&gt;</code></td>
-              <td>The latitude and longitude</td>
+              <td>The latitude and longitude.</td>
             </tr>
           </tbody>
         </table>
-      </div>
-    </div>
-  </div>
+        <h3>Example</h3>
+      <pre class="code-example"><code>=WIKIGEOCOORDINATES("en:Berlin")</code></pre>
+      <pre class="code-result"><code>52.51666667&#9;13.38333333</code></pre>
+    </section>
+    </main>
   <script>
-    (function createNavigation() {
-
-      var toTop = function(e) {
-        if (e.offsetY <= 0) {
-          window.location.hash = 'gc-wrapper';
-        }
-      };
-
-      var select = document.querySelector('#functionSelect');
-      var functions = document.querySelectorAll('h2');
-      for (var i = 0, lenI = functions.length; i < lenI; i++) {
-        var header = functions[i];
-        header.addEventListener('click', toTop);
-        var functionName = header.textContent;
-        header.id = functionName;
-        var option = document.createElement('option');
-        option.textContent = functionName;
-        option.value = functionName;
-        select.appendChild(option);
-      }
-
-      select.addEventListener('input', function() {
-        window.location.hash = select.options[select.selectedIndex].value;
+    (function() {
+      var sections = Array.prototype.slice.call(
+          document.querySelectorAll('section'));
+      sections.sort(function(a, b) {
+        a = a.querySelector('h2').textContent;
+        b = b.querySelector('h2').textContent;
+        if (a < b) { return -1; }
+        if (a > b) { return 1; }
+        return 0;
       });
+      var lenI = sections.length;
+      var select = document.querySelector('#functionSelect');
+
+      (function createNavigation() {
+        for (var i = 0; i < lenI; i++) {
+          var header = sections[i];
+          var functionName = header.querySelector('h2').textContent;
+          header.id = functionName;
+          var option = document.createElement('option');
+          option.textContent = functionName;
+          option.value = functionName;
+          select.appendChild(option);
+        }
+
+        var toggleFunction = function() {
+          var selectedValue = select.options[select.selectedIndex].value;
+          for (var i = 0; i < lenI; i++) {
+            var section = sections[i];
+            if (section.id === selectedValue) {
+              section.style.display = 'block';
+            } else {
+              section.style.display = 'none';
+            }
+          }
+        };
+
+        select.addEventListener('input', toggleFunction);
+        select.selectedIndex = 0;
+        toggleFunction();
+      })();
     })();
   </script>
 </body>
