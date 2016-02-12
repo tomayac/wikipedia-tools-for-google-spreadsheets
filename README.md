@@ -1,102 +1,21 @@
 # Wikipedia Tools for Google Spreadsheets
-A couple of Wikipedia utilities for use in Google Spreadsheets.
 
-![Wikipedia Tools for Google Spreadsheets](https://lh3.googleusercontent.com/K_SEDvOrgATTpLMMFCHhfjeH2Cgn05lyu0dmFcrZVNwErD2RQMxNLsJ-AG8QQgQsO1h1zi5-3qudgMi-Cs12MuW_rmE "Wikipedia Tools for Google Spreadsheets")
+A **Google Spreadsheets add-on** that makes working with data from **Wikipedia** and **Wikidata** a joy.
+
+![Wikipedia Tools for Google Spreadsheets](https://github.com/tomayac/wikipedia-tools-for-google-spreadsheets/blob/master/screenshot.png "Wikipedia Tools for Google Spreadsheets")
+
+## Installation
+
+Find the [Wikipedia Tools](https://chrome.google.com/webstore/detail/wikipedia-tools/aiilcelhmpllcgkhhpifagfehbddkdfp?utm_source=permalink)
+in the Google Add-on Store and install them by clicking on the blue "+ Free" button.
 
 ## Documentation
-See the [documentation](https://script.google.com/macros/library/versions/d/MGZfQ_cBpwsvTDk_-3Pp5ZWGKoUaL1Yht)
-sorted by version (choose the latest stable release).
 
-## Usage
-Use it in your spreadsheet following the [managing libraries](https://developers.google.com/apps-script/guide_libraries)
-documentation. The required project key is ```MGZfQ_cBpwsvTDk_-3Pp5ZWGKoUaL1Yht```. You can then call the functions in the **scripts editor**
-with the identifier prefix `WikipediaTools.` as outlined below:
-
-```javascript
-WikipediaTools.WIKISYNONYMS(article);
-
-WikipediaTools.WIKITRANSLATE(article, opt_targetLanguages, opt_returnAsObject, opt_skipHeader);
-
-WikipediaTools.WIKIEXPAND(article, opt_targetLanguages, opt_returnAsObject);
-
-WikipediaTools.WIKISUBCATEGORIES(category);
-
-WikipediaTools.WIKICATEGORYMEMBERS(category);
-
-WikipediaTools.WIKIINBOUNDLINKS(article);
-
-WikipediaTools.WIKIOUTBOUNDLINKS(article);
-
-WikipediaTools.WIKIMUTUALLINKS(article);
-
-WikipediaTools.WIKIGEOCOORDINATES(article);
-
-WikipediaTools.WIKIPAGEVIEWS(article, opt_start, opt_end);
-
-WikipediaTools.WIKIPAGEEDITS(article, opt_start, opt_end);
-
-WikipediaTools.WIKIDATAFACTS(article);
-
-WikipediaTools.GOOGLESUGGEST(keyword, opt_language);
-```
-
-If you want to use the provided functions directly from a **cell** as a formula, you need to alias all functions as follows in the scripts editor:
-
-```javascript
-function WIKIEXPAND(article, opt_targetLanguages, opt_returnAsObject) {
-  return WikipediaTools.WIKIEXPAND(article, opt_targetLanguages, opt_returnAsObject);
-}
-
-function WIKISYNONYMS(article) {
-  return WikipediaTools.WIKISYNONYMS(article);
-}
-
-function WIKITRANSLATE(article, opt_targetLanguages, opt_returnAsObject, opt_skipHeader) {
-  return WikipediaTools.WIKITRANSLATE(article, opt_targetLanguages, opt_returnAsObject, opt_skipHeader);
-}
-
-function WIKICATEGORYMEMBERS(category) {
-  return WikipediaTools.WIKICATEGORYMEMBERS(category);
-}
-
-function WIKISUBCATEGORIES(category) {
-  return WikipediaTools.WIKISUBCATEGORIES(category);
-}
-
-function WIKIINBOUNDLINKS(article) {
-  return WikipediaTools.WIKIINBOUNDLINKS(article);
-}
-
-function WIKIOUTBOUNDLINKS(article) {
-  return WikipediaTools.WIKIOUTBOUNDLINKS(article);
-}
-
-function WIKIMUTUALLINKS(article) {
-  return WikipediaTools.WIKIMUTUALLINKS(article);
-}
-
-function WIKIGEOCOORDINATES(article) {
-  return WikipediaTools.WIKIGEOCOORDINATES(article);
-}
-
-function WIKIPAGEVIEWS(article, opt_start, opt_end) {
-  return WikipediaTools.WIKIPAGEVIEWS(article, opt_start, opt_end);
-}
-
-function WIKIPAGEEDITS(article, opt_start, opt_end) {
-  return WikipediaTools.WIKIPAGEEDITS(article, opt_start, opt_end);
-}
-
-function WIKIDATAFACTS(article) {
-  return WikipediaTools.WIKIDATAFACTS(article);
-}
-
-function GOOGLESUGGEST(keyword, opt_language) {
-  return WikipediaTools.GOOGLESUGGEST(keyword, opt_language);
-}
-```
+Once the add-on is installed, click "Add-ons" > "Wikipedia Tools" > "Show documentation"
+in the Google Sheets menu bar to see a sidebar with the full documentation and examples.
 
 ## Demo
+
 See the output of the functions in this [Google spreadsheet](https://docs.google.com/spreadsheets/d/1sVduZul787O-bRzuy0UKpRl7bkouxwaIOsxXuJGm6yg/edit?usp=sharing).
 
 ## License
