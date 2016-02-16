@@ -17,7 +17,7 @@
     td {border: 1px solid #ddd; vertical-align: top;}
     code {color: green; white-space: pre;}
     .code-example {border: solid 1px #ccc; padding: .1em; font-weight: bold; background-color: #FFF5EE;}
-    .code-result {border: solid 1px #bbb; padding: .1em; background-color: #FFF5EE; text-overflow: ellipsis;}
+    .code-result {border: solid 1px #bbb; padding: .1em; background-color: #FFF5EE; overflow: hidden; text-overflow: ellipsis;}
     .inline-code {font-family: monospace; color: green;}
   </style>
 </head>
@@ -44,13 +44,13 @@
           </tr>
           <tr>
             <td>opt_start</td>
-            <td><code>string</code></td>
+            <td><code>string=</code></td>
             <td>The start date since when pageviews
             statistics should be retrieved from (optional).</td>
           </tr>
           <tr>
             <td>opt_end</td>
-            <td><code>string</code></td>
+            <td><code>string=</code></td>
             <td>The end date until when pageviews
             statistics should be retrieved to (optional).</td>
           </tr>
@@ -80,6 +80,56 @@ February 6, 2016&#9;4613
 February 5, 2016&#9;6168</code></pre>
     </section>
     <section>
+      <h2>WIKIARTICLESAROUND</h2>
+      <p>Returns Wikipedia articles around a Wikipedia article or around a point.</p>
+      <h3>Arguments</h3>
+      <table>
+        <tbody>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Type</th>
+            <th scope="col">Description</th>
+          </tr>
+          <tr>
+            <td>articleOrPoint</td>
+            <td><code>string</code></td>
+            <td>The Wikipedia article or the point to get articles around for.</td>
+          </tr>
+          <tr>
+            <td>radius</td>
+            <td><code>number</code></td>
+            <td>The search radius in meters.</td>
+          </tr>
+          <tr>
+            <td>opt_includeDistance</td>
+            <td><code>boolean=</code></td>
+            <td>Whether to include the distance in the output, defaults to false (optional).</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>Return Values</h3>
+      <table>
+        <tbody>
+          <tr>
+            <th scope="col">Type</th>
+            <th scope="col">Description</th>
+          </tr>
+          <tr>
+            <td><code>Array&lt;string&gt;</code></td>
+            <td>The list of articles around the given article or point.</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>Example</h3>
+      <pre class="code-example"><code>=WIKIARTICLESAROUND(
+  "de:Berlin",
+  1000
+)</code></pre>
+      <pre class="code-result"><code>Battle of Berlin&#9;52.516666666667&#9;13.383333333333&#9;0
+Timeline of Berlin&#9;52.516667&#9;13.383333&#9;0
+Warschauer Straße&#9;52.51658&#9;13.381&#9;158.2</code></pre>
+    </section>
+    <section>
       <h2>WIKIPAGEEDITS</h2>
         <p>Returns Wikipedia pageedits statistics for a Wikipedia article.</p>
         <h3>Arguments</h3>
@@ -98,7 +148,7 @@ February 5, 2016&#9;6168</code></pre>
             </tr>
             <tr>
               <td>opt_start</td>
-              <td><code>string</code></td>
+              <td><code>string=</code></td>
               <td>The start date since when pageedits
               statistics should be retrieved from (optional).</td>
             </tr>
