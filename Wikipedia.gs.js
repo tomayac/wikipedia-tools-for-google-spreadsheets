@@ -326,6 +326,45 @@ function WIKISUBCATEGORIES(category) {
 }
 
 /**
+ * Returns Wikipedia categories for a Wikipedia article.
+ *
+ * @param {string} article The Wikipedia article in the format "language:Article_Title" ("en:Berlin") to get categories for.
+ * @return {Array<string>} The list of categories.
+ * @customfunction
+ */
+function WIKICATEGORIES(article) {
+  'use strict';
+  if (!article) {
+    return '';
+  }
+  var results = [];
+  try {
+    var language = article.split(/:(.+)?/)[0];
+    var title = article.split(/:(.+)?/)[1];
+    if (!title) {
+      return '';
+    }
+    var url = 'https://' + language + '.wikipedia.org/w/api.php' +
+        '?action=query' +
+        '&prop=categories' +
+        '&format=xml' +
+        '&cllimit=max' +
+        '&titles=' + encodeURIComponent(title.replace(/\s/g, '_'));
+    var xml = UrlFetchApp.fetch(url, HEADERS).getContentText();
+    var document = XmlService.parse(xml);
+    var entries = document.getRootElement().getChild('query').getChild('pages')
+        .getChild('page').getChild('categories').getChildren('cl');
+    for (var i = 0; i < entries.length; i++) {
+      var text = entries[i].getAttribute('title').getValue();
+      results[i] = text;
+    }
+  } catch (e) {
+    // no-op
+  }
+  return results.length > 0 ? results : '';
+}
+
+/**
  * Returns Wikipedia inbound links for a Wikipedia article.
  *
  * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get inbound links for.
