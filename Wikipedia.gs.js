@@ -242,6 +242,43 @@ function WIKIEXPAND(article, opt_targetLanguages, opt_returnAsObject) {
 }
 
 /**
+ * Returns the Wikimedia Commons link for a file.
+ *
+ * @param {string} article The Wikimedia Commons file name in the format "language:File_Name" ("en:Flag of Berlin.svg") to get the link for.
+ * @return {string} The link of the Wikimedia Commons file.
+ * @customfunction
+ */
+function WIKICOMMONSLINK(file) {
+  'use strict';
+  if (!file) {
+    return '';
+  }
+  var results = [];
+  try {
+    var language = file.split(/:(.+)?/)[0];
+    var title = file.split(/:(.+)?/)[1];
+    if (!title) {
+      return '';
+    }
+    var url = 'https://' + language + '.wikipedia.org/w/api.php' +
+        '?action=query' +
+        '&prop=imageinfo' +
+        '&iiprop=url' +
+        '&format=xml' +
+        '&titles=File:' + encodeURIComponent(title.replace(/\s/g, '_'));
+    var xml = UrlFetchApp.fetch(url, HEADERS).getContentText();
+    var document = XmlService.parse(xml);
+    var entry = document.getRootElement().getChild('query').getChild('pages')
+        .getChild('page').getChild('imageinfo').getChild('ii');
+    var fileUrl = entry.getAttribute('url').getValue();
+    results[0] = fileUrl;
+  } catch (e) {
+    // no-op
+  }
+  return results.length > 0 ? results : '';
+}
+
+/**
  * Returns Wikipedia category members for a Wikipedia category.
  *
  * @param {string} category The Wikipedia category in the format "language:Category_Title" ("en:Category:Visitor_attractions_in_Berlin") to get members for.
