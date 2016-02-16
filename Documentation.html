@@ -127,7 +127,8 @@ February 5, 2016&#9;6168</code></pre>
 )</code></pre>
       <pre class="code-result"><code>Battle of Berlin&#9;52.516666666667&#9;13.383333333333&#9;0
 Timeline of Berlin&#9;52.516667&#9;13.383333&#9;0
-Warschauer Straße&#9;52.51658&#9;13.381&#9;158.2</code></pre>
+Warschauer Straße&#9;52.51658&#9;13.381&#9;158.2
+…</code></pre>
     </section>
     <section>
       <h2>WIKIPAGEEDITS</h2>
@@ -182,7 +183,7 @@ Warschauer Straße&#9;52.51658&#9;13.381&#9;158.2</code></pre>
       <pre class="code-result"><code>February 7, 2016&#9;-5
 February 7, 2016&#9;-16
 February 6, 2016&#9;-17</code></pre>
-    </section>
+      </section>
       <section>
         <h2>WIKICATEGORYMEMBERS</h2>
         <p>Returns Wikipedia category members for a Wikipedia category.</p>
@@ -222,7 +223,7 @@ February 6, 2016&#9;-17</code></pre>
 Free Secession
 Intelexit
 …</code></pre>
-    </section>
+      </section>
       <section>
         <h2>WIKIOUTBOUNDLINKS</h2>
         <p>Returns Wikipedia outbound links for a Wikipedia article.</p>
@@ -263,7 +264,7 @@ Intelexit
 1896 Summer Olympics
 1900 Summer Olympics
 …</code></pre>
-    </section>
+      </section>
       <section>
         <h2>WIKISYNONYMS</h2>
         <p>Returns Wikipedia synonyms (redirects) for a Wikipedia article.</p>
@@ -302,7 +303,7 @@ Intelexit
 Berlin, Germany
 Capital of East Germany
 …</code></pre>
-    </section>
+      </section>
       <section>
         <h2>WIKITRANSLATE</h2>
         <p>Returns Wikipedia translations (language links) for a Wikipedia article.</p>
@@ -349,7 +350,7 @@ Capital of East Germany
 ace&#9;Berlin
 af&#9;Berlyn
 …</code></pre>
-    </section>
+      </section>
       <section>
         <h2>WIKIEXPAND</h2>
         <p>Returns Wikipedia translations (language links) and synonyms (redirects) for a Wikipedia
@@ -399,7 +400,7 @@ DE3&#9;CityBerlin
 &#9;Berlin, Germany
 &#9;Capital of East Germany
 …</code></pre>
-    </section>
+      </section>
       <section>
         <h2>WIKIMUTUALLINKS</h2>
         <p>Returns Wikipedia mutual links, i.e, the intersection of inbound and outbound links for
@@ -439,7 +440,7 @@ DE3&#9;CityBerlin
 Ankara
 Amsterdam
 …</code></pre>
-    </section>
+      </section>
       <section>
         <h2>WIKISUBCATEGORIES</h2>
         <p>Returns Wikipedia subcategories for a Wikipedia category.</p>
@@ -479,7 +480,47 @@ Amsterdam
 Category:Culture in Berlin
 Category:Crime in Berlin
 …</code></pre>
-    </section>
+      </section>
+      <section>
+        <h2>WIKICATEGORIES</h2>
+        <p>Returns Wikipedia categories for a Wikipedia article.</p>
+        <h3>Arguments</h3>
+        <table>
+          <tbody>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
+            </tr>
+            <tr>
+              <td>article</td>
+              <td><code>string</code></td>
+              <td>The Wikipedia article to get categories for.</td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>Return Values</h3>
+        <table>
+          <tbody>
+            <tr>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
+            </tr>
+            <tr>
+              <td><code>Array&lt;string&gt;</code></td>
+              <td>The list of categories.</td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>Example</h3>
+      <pre class="code-example"><code>=WIKICATEGORIES(
+  "en:Category:Berlin"
+)</code></pre>
+      <pre class="code-result"><code>Category:1237 establishments
+Category:All articles with dead external links
+Category:All articles with failed verification
+…</code></pre>
+      </section>
       <section>
         <h2>WIKIDATAFACTS</h2>
         <p>Returns Wikidata facts for a Wikipedia article.</p>
@@ -524,7 +565,7 @@ Category:Crime in Berlin
 country&#9;&#9;Germany
 postal code&#9;10115–14199
 …</code></pre>
-    </section>
+      </section>
       <section>
         <h2>WIKIINBOUNDLINKS</h2>
         <p>Returns Wikipedia inbound links for a Wikipedia article.</p>
@@ -563,7 +604,7 @@ postal code&#9;10115–14199
 Ankara
 Amsterdam
 …</code></pre>
-    </section>
+      </section>
       <section>
         <h2>WIKIGEOCOORDINATES</h2>
         <p>Returns Wikipedia geocoordinates for a Wikipedia article.</p>
@@ -600,7 +641,7 @@ Amsterdam
       <pre class="code-example"><code>=WIKIGEOCOORDINATES("en:Berlin")</code></pre>
       <pre class="code-result"><code>52.51666667&#9;13.38333333</code></pre>
     </section>
-    </main>
+  </main>
   <script>
     (function() {
       var sections = Array.prototype.slice.call(
