@@ -244,19 +244,19 @@ function WIKIEXPAND(article, opt_targetLanguages, opt_returnAsObject) {
 /**
  * Returns the Wikimedia Commons link for a file.
  *
- * @param {string} article The Wikimedia Commons file name in the format "language:File_Name" ("en:Flag of Berlin.svg") to get the link for.
+ * @param {string} fileName The Wikimedia Commons file name in the format "language:File_Name" ("en:Flag of Berlin.svg") to get the link for.
  * @return {string} The link of the Wikimedia Commons file.
  * @customfunction
  */
-function WIKICOMMONSLINK(file) {
+function WIKICOMMONSLINK(fileName) {
   'use strict';
-  if (!file) {
+  if (!fileName) {
     return '';
   }
   var results = [];
   try {
-    var language = file.split(/:(.+)?/)[0];
-    var title = file.split(/:(.+)?/)[1];
+    var language = fileName.split(/:(.+)?/)[0];
+    var title = fileName.split(/:(.+)?/)[1];
     if (!title) {
       return '';
     }
