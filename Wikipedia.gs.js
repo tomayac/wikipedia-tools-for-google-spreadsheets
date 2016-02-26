@@ -931,6 +931,39 @@ function WIKISEARCH(query, opt_didYouMean) {
 }
 
 /**
+ * Returns the Wikidata qid of the corresponding Wikidata item for an article.
+ *
+ * @param {string} article The article in the format "language:Query" ("de:Berlin") to get the Wikidata qid for.
+ * @return {string} The Wikidata qid.
+ * @customfunction
+ */
+function WIKIDATAQID(article) {
+  'use strict';
+  if (!article) {
+    return '';
+  }
+  var results = [];
+  try {
+    var language = article.split(/:(.+)?/)[0];
+    var title = article.split(/:(.+)?/)[1];
+    if (!title) {
+      return '';
+    }
+    var url = 'https://www.wikidata.org/w/api.php' +
+        '?action=wbgetentities' +
+        '&sites=' + language + 'wiki' +
+        '&format=json' +
+        '&props=' + // Empty on purpose
+        '&titles=' + encodeURIComponent(title);
+    var json = JSON.parse(UrlFetchApp.fetch(url, HEADERS).getContentText());
+    results[0] = Object.keys(json.entities)[0];
+  } catch (e) {
+    // no-op
+  }
+  return results.length > 0 ? results : '';
+}
+
+/**
  * Executed on add-on install.
  */
 function onInstall() {
