@@ -757,6 +757,47 @@ Greater Berlin Act
       <pre class="code-example"><code>=WIKIDATAQID("en:Berlin")</code></pre>
       <pre class="code-result"><code>Q64</code></pre>
     </section>
+    <section>
+      <h2>WIKIQUARRY</h2>
+      <p>Returns the output of the <a href="https://meta.wikimedia.org/wiki/Research:Quarry" target="_blank">Quarry</a>
+        query with the specified query ID.
+      </p>
+      <h3>Arguments</h3>
+      <table>
+        <tbody>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Type</th>
+            <th scope="col">Description</th>
+          </tr>
+          <tr>
+            <td>queryId</td>
+            <td><code>number</code></td>
+            <td>The query ID of the Quarry query to run.</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>Return Values</h3>
+      <table>
+        <tbody>
+          <tr>
+            <th scope="col">Type</th>
+            <th scope="col">Description</th>
+          </tr>
+          <tr>
+            <td><code>Array&lt;string&gt;</code></td>
+            <td>The list of query results, the first line represents the header.</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>Example</h3>
+      <pre class="code-example"><code>=WIKIQUARRY(1226)</code></pre>
+      <pre class="code-result"><code>page_title
+Alaminos_City.png
+Balungao.png
+Cab_logo.PNG
+…</code></pre>
+    </section>
   </main>
   <script>
     (function() {

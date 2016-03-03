@@ -964,6 +964,39 @@ function WIKIDATAQID(article) {
 }
 
 /**
+ * Returns the output of the Quarry (https://meta.wikimedia.org/wiki/Research:Quarry) query with the specified query ID.
+ *
+ * @param {number} queryId The query ID of the Quarry query to run.
+ * @return {Array<string>} The list of query results, the first line represents the header.
+ * @customfunction
+ */
+function WIKIQUARRY(queryId) {
+  'use strict';
+  if (!queryId) {
+    return '';
+  }
+  var results = [];
+  try {
+    // Translate from query_id to qrun_id by scraping the HTML representation
+    var scrapeUrl = 'https://quarry.wmflabs.org/query/' + queryId;
+    var xml = UrlFetchApp.fetch(scrapeUrl, HEADERS).getContentText();
+    var document = Xml.parse(xml, true);
+    var head = XmlService.parse(document.html.head.toXmlString());
+    var jsonString = head.getRootElement().getChild('script')
+        .getText().replace('var vars = ', '').replace(';', '');
+    var queryJson = JSON.parse(jsonString);
+    var url = 'https://quarry.wmflabs.org/run/' + queryJson.qrun_id +
+        '/output/0/json?download=true';
+    var json = JSON.parse(UrlFetchApp.fetch(url, HEADERS).getContentText());
+    results[0] = json.headers;
+    results = results.concat(json.rows);
+  } catch (e) {
+    // no-op
+  }
+  return results.length > 0 ? results : '';
+}
+
+/**
  * Executed on add-on install.
  */
 function onInstall() {
