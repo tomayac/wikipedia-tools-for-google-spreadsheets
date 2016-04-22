@@ -21,10 +21,11 @@ var HEADERS = {headers: {'Cache-Control': 'max-age=0'}};
  * Returns Wikipedia synonyms (redirects) for a Wikipedia article.
  *
  * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get synonyms for.
+ * @param {string=} opt_namespaces Only include pages in these namespaces (optional).
  * @return {Array<string>} The list of synonyms.
  * @customfunction
  */
-function WIKISYNONYMS(article) {
+function WIKISYNONYMS(article, opt_namespaces) {
   'use strict';
   if (!article) {
     return '';
@@ -38,7 +39,8 @@ function WIKISYNONYMS(article) {
     }
     var url = 'https://' + language + '.wikipedia.org/w/api.php' +
         '?action=query' +
-        '&blnamespace=0' +
+        '&blnamespace=' + (opt_namespaces ?
+            encodeURIComponent(opt_namespaces) : '0') +
         '&list=backlinks' +
         '&blfilterredir=redirects' +
         '&bllimit=max' +
@@ -64,10 +66,12 @@ function WIKISYNONYMS(article) {
  * @param {string} articleOrPoint The Wikipedia article in the format "language:Article_Title" ("de:Berlin") or the point in the format "language:Latitude,Longitude" ("en:37.786971,-122.399677") to get articles around for.
  * @param {number} radius The search radius in meters.
  * @param {boolean=} opt_includeDistance Whether to include the distance in the output, defaults to false (optional).
+ * @param {string=} opt_namespaces Only include pages in these namespaces (optional).
  * @return {Array<string>} The list of articles around the given article or point.
  * @customfunction
  */
-function WIKIARTICLESAROUND(articleOrPoint, radius, opt_includeDistance) {
+function WIKIARTICLESAROUND(articleOrPoint, radius, opt_includeDistance,
+    opt_namespaces) {
   'use strict';
   if (!articleOrPoint) {
     return '';
@@ -100,6 +104,8 @@ function WIKIARTICLESAROUND(articleOrPoint, radius, opt_includeDistance) {
           '&gsradius=' + radius +
           '&gscoord=' + latitude + '%7C' + longitude;
     }
+    url += '&gsnamespace=' + (opt_namespaces ?
+        encodeURIComponent(opt_namespaces) : '0');
     var xml = UrlFetchApp.fetch(url, HEADERS).getContentText();
     var document = XmlService.parse(xml);
     var entries = document.getRootElement().getChild('query')
@@ -282,10 +288,11 @@ function WIKICOMMONSLINK(fileName) {
  * Returns Wikipedia category members for a Wikipedia category.
  *
  * @param {string} category The Wikipedia category in the format "language:Category_Title" ("en:Category:Visitor_attractions_in_Berlin") to get members for.
+ * @param {string=} opt_namespaces Only include pages in these namespaces (optional).
  * @return {Array<string>} The list of category members.
  * @customfunction
  */
-function WIKICATEGORYMEMBERS(category) {
+function WIKICATEGORYMEMBERS(category, opt_namespaces) {
   'use strict';
   if (!category) {
     return '';
@@ -304,7 +311,8 @@ function WIKICATEGORYMEMBERS(category) {
         '&cmprop=title' +
         '&cmtype=subcat%7Cpage' +
         '&format=xml' +
-        '&cmnamespace=0' +
+        '&cmnamespace=' + (opt_namespaces ?
+            encodeURIComponent(opt_namespaces) : '0') +
         '&cmtitle=' + encodeURIComponent(title.replace(/\s/g, '_'));
     var xml = UrlFetchApp.fetch(url, HEADERS).getContentText();
     var document = XmlService.parse(xml);
@@ -324,10 +332,11 @@ function WIKICATEGORYMEMBERS(category) {
  * Returns Wikipedia subcategories for a Wikipedia category.
  *
  * @param {string} category The Wikipedia category in the format "language:Category_Title" ("en:Category:Visitor_attractions_in_Berlin") to get subcategories for.
+ * @param {string=} opt_namespaces Only include pages in these namespaces (optional).
  * @return {Array<string>} The list of subcategories.
  * @customfunction
  */
-function WIKISUBCATEGORIES(category) {
+function WIKISUBCATEGORIES(category, opt_namespaces) {
   'use strict';
   if (!category) {
     return '';
@@ -346,7 +355,8 @@ function WIKISUBCATEGORIES(category) {
         '&cmprop=title' +
         '&cmtype=subcat%7Cpage' +
         '&format=xml' +
-        '&cmnamespace=14' +
+        '&cmnamespace=' + (opt_namespaces ?
+            encodeURIComponent(opt_namespaces) : '14') +
         '&cmtitle=' + encodeURIComponent(title.replace(/\s/g, '_'));
     var xml = UrlFetchApp.fetch(url, HEADERS).getContentText();
     var document = XmlService.parse(xml);
@@ -405,10 +415,11 @@ function WIKICATEGORIES(article) {
  * Returns Wikipedia inbound links for a Wikipedia article.
  *
  * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get inbound links for.
+ * @param {string=} opt_namespaces Only include pages in these namespaces (optional).
  * @return {Array<string>} The list of inbound links.
  * @customfunction
  */
-function WIKIINBOUNDLINKS(article) {
+function WIKIINBOUNDLINKS(article, opt_namespaces) {
   'use strict';
   if (!article) {
     return '';
@@ -424,7 +435,8 @@ function WIKIINBOUNDLINKS(article) {
         '?action=query' +
         '&list=backlinks' +
         '&bllimit=max' +
-        '&blnamespace=0' +
+        '&blnamespace=' + (opt_namespaces ?
+            encodeURIComponent(opt_namespaces) : '0') +
         '&format=xml' +
         '&bltitle=' + encodeURIComponent(title.replace(/\s/g, '_'));
     var xml = UrlFetchApp.fetch(url, HEADERS).getContentText();
@@ -445,10 +457,11 @@ function WIKIINBOUNDLINKS(article) {
  * Returns Wikipedia outbound links for a Wikipedia article.
  *
  * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get outbound links for.
+ * @param {string=} opt_namespaces Only include pages in these namespaces (optional).
  * @return {Array<string>} The list of outbound links.
  * @customfunction
  */
-function WIKIOUTBOUNDLINKS(article) {
+function WIKIOUTBOUNDLINKS(article, opt_namespaces) {
   'use strict';
   if (!article) {
     return '';
@@ -463,7 +476,8 @@ function WIKIOUTBOUNDLINKS(article) {
     var url = 'https://' + language + '.wikipedia.org/w/api.php' +
         '?action=query' +
         '&prop=links' +
-        '&plnamespace=0' +
+        '&plnamespace=' + (opt_namespaces ?
+            encodeURIComponent(opt_namespaces) : '0') +
         '&format=xml' +
         '&pllimit=max' +
         '&titles=' + encodeURIComponent(title.replace(/\s/g, '_'));
@@ -485,13 +499,14 @@ function WIKIOUTBOUNDLINKS(article) {
  * Returns Wikipedia mutual links, i.e, the intersection of inbound and outbound links for a Wikipedia article.
  *
  * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get mutual links for.
+ * @param {string=} opt_namespaces Only include pages in these namespaces (optional).
  * @return {Array<string>} The list of mutual links.
  * @customfunction
  */
-function WIKIMUTUALLINKS(article) {
+function WIKIMUTUALLINKS(article, opt_namespaces) {
   'use strict';
-  var inboundLinks = WIKIINBOUNDLINKS(article);
-  var outboundLinks = WIKIOUTBOUNDLINKS(article);
+  var inboundLinks = WIKIINBOUNDLINKS(article, opt_namespaces);
+  var outboundLinks = WIKIOUTBOUNDLINKS(article, opt_namespaces);
   var mutualLinks = inboundLinks.filter(function(link) {
     return outboundLinks.indexOf(link) > -1;
   });
@@ -885,10 +900,11 @@ function GOOGLESUGGEST(keyword, opt_language) {
  *
  * @param {string} query The query in the format "language:Query" ("de:Berlin") to get search results for.
  * @param {boolean=} opt_didYouMean Whether to return a "did you mean" suggestion, defaults to false (optional).
+ * @param {string=} opt_namespaces Only include pages in these namespaces (optional).
  * @return {Array<string>} The list of article results.
  * @customfunction
  */
-function WIKISEARCH(query, opt_didYouMean) {
+function WIKISEARCH(query, opt_didYouMean, opt_namespaces) {
   'use strict';
   if (!query) {
     return '';
@@ -907,7 +923,9 @@ function WIKISEARCH(query, opt_didYouMean) {
         '&srinfo=suggestion' +
         '&srprop=' + // Empty on purpose
         '&srlimit=max' +
-        '&srsearch=' + encodeURIComponent(title);
+        '&srsearch=' + encodeURIComponent(title) +
+        '&srnamespace=' + (opt_namespaces ?
+            encodeURIComponent(opt_namespaces) : '0');
     var json = JSON.parse(UrlFetchApp.fetch(url, HEADERS).getContentText());
     json.query.search.forEach(function(result, i) {
       result = result.title;
