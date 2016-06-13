@@ -714,10 +714,11 @@ function WIKIDATAFACTS(article, opt_multiObjectMode) {
  * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get pageviews statistics for.
  * @param {string=} opt_start The start date in the format "YYYYMMDD" ("2007-06-08") since when pageviews statistics should be retrieved from (optional).
  * @param {string=} opt_end The end date in the format "YYYYMMDD" ("2007-06-08") until when pageviews statistics should be retrieved to (optional).
+ * @param {boolean=} opt_sumOnly Whether to only return the sum of all pageviews in the requested period (optional).
  * @return {Array<number>} The list of pageviews between start and end per day.
  * @customfunction
  */
-function WIKIPAGEVIEWS(article, opt_start, opt_end) {
+function WIKIPAGEVIEWS(article, opt_start, opt_end, opt_sumOnly) {
   'use strict';
 
   var getIsoDate = function(date) {
@@ -736,6 +737,7 @@ function WIKIPAGEVIEWS(article, opt_start, opt_end) {
     return '';
   }
   var results = [];
+  var sum = 0;
   try {
     var language = article.split(/:(.+)?/)[0];
     var title = article.split(/:(.+)?/)[1];
@@ -761,25 +763,33 @@ function WIKIPAGEVIEWS(article, opt_start, opt_end) {
         '/' + opt_end;
     var json = JSON.parse(UrlFetchApp.fetch(url, HEADERS).getContentText());
     json.items.forEach(function(item) {
-      var timestamp = item.timestamp
-          .replace(/^(\d{4})(\d{2})(\d{2})(\d{2})$/, '$1-$2-$3-$4').split('-');
-      timestamp = new Date(Date.UTC(
-          parseInt(timestamp[0], 10), // Year
-          parseInt(timestamp[1], 10) - 1, // Month
-          parseInt(timestamp[2], 10), // Day
-          parseInt(timestamp[3], 10), // Hour
-          0, // Minute
-          0)); // Second))
-      results.push([
-        timestamp,
-        item.views
-      ]);
+      if (opt_sumOnly) {
+        sum += item.views;
+      } else {
+        var timestamp = item.timestamp
+            .replace(/^(\d{4})(\d{2})(\d{2})(\d{2})$/, '$1-$2-$3-$4').split('-');
+        timestamp = new Date(Date.UTC(
+            parseInt(timestamp[0], 10), // Year
+            parseInt(timestamp[1], 10) - 1, // Month
+            parseInt(timestamp[2], 10), // Day
+            parseInt(timestamp[3], 10), // Hour
+            0, // Minute
+            0)); // Second))
+        results.push([
+          timestamp,
+          item.views
+        ]);
+      }
     });
-    results.reverse(); // Order from new to old
   } catch (e) {
     // no-op
   }
-  return results.length > 0 ? results : '';
+  if (opt_sumOnly) {
+    return sum;
+  } else {
+    results.reverse(); // Order from new to old
+    return results.length > 0 ? results : '';
+  }
 }
 
 /**
