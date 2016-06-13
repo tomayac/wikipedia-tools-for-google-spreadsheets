@@ -16,6 +16,7 @@
  */
 
 var HEADERS = {headers: {'Cache-Control': 'max-age=0'}};
+var DEFAULT_LANGUAGE = 'en';
 
 /**
  * Returns Wikipedia synonyms (redirects) for a Wikipedia article.
@@ -32,8 +33,15 @@ function WIKISYNONYMS(article, opt_namespaces) {
   }
   var results = [];
   try {
-    var language = article.split(/:(.+)?/)[0];
-    var title = article.split(/:(.+)?/)[1];
+    var language;
+    var title;
+    if (article.indexOf(':') !== -1) {
+      language = article.split(/:(.+)?/)[0];
+      title = article.split(/:(.+)?/)[1];
+    } else {
+      language = DEFAULT_LANGUAGE;
+      title = article;
+    }
     if (!title) {
       return '';
     }
@@ -78,16 +86,38 @@ function WIKIARTICLESAROUND(articleOrPoint, radius, opt_includeDistance,
   }
   var results = [];
   try {
-    var language = articleOrPoint.split(/:(.+)?/)[0];
-    var rest = articleOrPoint.split(/:(.+)?/)[1];
-    var title = false;
-    var latitude = false;
-    var longitude = false;
-    if (/^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/.test(rest)) {
-      latitude = rest.split(',')[0];
-      longitude = rest.split(',')[1];
+    var language;
+    var rest;
+    var title;
+    var latitude;
+    var longitude;
+    if (articleOrPoint.indexOf(':') !== -1) {
+      language = articleOrPoint.split(/:(.+)?/)[0];
+      rest = articleOrPoint.split(/:(.+)?/)[1];
+      title = false;
+      latitude = false;
+      longitude = false;
+      if (/^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/.test(rest)) {
+        latitude = rest.split(',')[0];
+        longitude = rest.split(',')[1];
+      } else {
+        title = rest;
+      }
     } else {
-      title = rest;
+      language = DEFAULT_LANGUAGE;
+      rest = articleOrPoint;
+      title = false;
+      latitude = false;
+      longitude = false;
+      if (/^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$/.test(rest)) {
+        latitude = rest.split(',')[0];
+        longitude = rest.split(',')[1];
+      } else {
+        title = rest;
+      }
+    }
+    if ((!title) && !(latitude && longitude)) {
+      return;
     }
     var url = 'https://' + language + '.wikipedia.org/w/api.php';
     if (title) {
@@ -153,8 +183,15 @@ function WIKITRANSLATE(article, opt_targetLanguages, opt_returnAsObject,
   });
   opt_targetLanguages = Object.keys(temp);
   try {
-    var language = article.split(/:(.+)?/)[0];
-    var title = article.split(/:(.+)?/)[1];
+    var language;
+    var title;
+    if (article.indexOf(':') !== -1) {
+      language = article.split(/:(.+)?/)[0];
+      title = article.split(/:(.+)?/)[1];
+    } else {
+      language = DEFAULT_LANGUAGE;
+      title = article;
+    }
     if (!title) {
       return '';
     }
@@ -217,8 +254,15 @@ function WIKIEXPAND(article, opt_targetLanguages, opt_returnAsObject) {
   }
   var results = opt_returnAsObject ? {} : [];
   try {
-    var language = article.split(/:(.+)?/)[0];
-    var title = article.split(/:(.+)?/)[1];
+    var language;
+    var title;
+    if (article.indexOf(':') !== -1) {
+      language = article.split(/:(.+)?/)[0];
+      title = article.split(/:(.+)?/)[1];
+    } else {
+      language = DEFAULT_LANGUAGE;
+      title = article;
+    }
     if (!title) {
       return '';
     }
@@ -261,8 +305,15 @@ function WIKICOMMONSLINK(fileName) {
   }
   var results = [];
   try {
-    var language = fileName.split(/:(.+)?/)[0];
-    var title = fileName.split(/:(.+)?/)[1];
+    var language;
+    var title;
+    if (fileName.indexOf(':') !== -1) {
+      language = fileName.split(/:(.+)?/)[0];
+      title = fileName.split(/:(.+)?/)[1];
+    } else {
+      language = DEFAULT_LANGUAGE;
+      title = fileName;
+    }
     if (!title) {
       return '';
     }
@@ -299,8 +350,15 @@ function WIKICATEGORYMEMBERS(category, opt_namespaces) {
   }
   var results = [];
   try {
-    var language = category.split(/:(.+)?/)[0];
-    var title = category.split(/:(.+)?/)[1];
+    var language;
+    var title;
+    if (category.indexOf(':') !== -1) {
+      language = category.split(/:(.+)?/)[0];
+      title = category.split(/:(.+)?/)[1];
+    } else {
+      language = DEFAULT_LANGUAGE;
+      title = category;
+    }
     if (!title) {
       return '';
     }
@@ -343,8 +401,15 @@ function WIKISUBCATEGORIES(category, opt_namespaces) {
   }
   var results = [];
   try {
-    var language = category.split(/:(.+)?/)[0];
-    var title = category.split(/:(.+)?/)[1];
+    var language;
+    var title;
+    if (category.indexOf(':') !== -1) {
+      language = category.split(/:(.+)?/)[0];
+      title = category.split(/:(.+)?/)[1];
+    } else {
+      language = DEFAULT_LANGUAGE;
+      title = category;
+    }
     if (!title) {
       return '';
     }
@@ -386,8 +451,15 @@ function WIKICATEGORIES(article) {
   }
   var results = [];
   try {
-    var language = article.split(/:(.+)?/)[0];
-    var title = article.split(/:(.+)?/)[1];
+    var language;
+    var title;
+    if (article.indexOf(':') !== -1) {
+      language = article.split(/:(.+)?/)[0];
+      title = article.split(/:(.+)?/)[1];
+    } else {
+      language = DEFAULT_LANGUAGE;
+      title = article;
+    }
     if (!title) {
       return '';
     }
@@ -426,8 +498,15 @@ function WIKIINBOUNDLINKS(article, opt_namespaces) {
   }
   var results = [];
   try {
-    var language = article.split(/:(.+)?/)[0];
-    var title = article.split(/:(.+)?/)[1];
+    var language;
+    var title;
+    if (article.indexOf(':') !== -1) {
+      language = article.split(/:(.+)?/)[0];
+      title = article.split(/:(.+)?/)[1];
+    } else {
+      language = DEFAULT_LANGUAGE;
+      title = article;
+    }
     if (!title) {
       return '';
     }
@@ -468,8 +547,15 @@ function WIKIOUTBOUNDLINKS(article, opt_namespaces) {
   }
   var results = [];
   try {
-    var language = article.split(/:(.+)?/)[0];
-    var title = article.split(/:(.+)?/)[1];
+    var language;
+    var title;
+    if (article.indexOf(':') !== -1) {
+      language = article.split(/:(.+)?/)[0];
+      title = article.split(/:(.+)?/)[1];
+    } else {
+      language = DEFAULT_LANGUAGE;
+      title = article;
+    }
     if (!title) {
       return '';
     }
@@ -527,8 +613,15 @@ function WIKIGEOCOORDINATES(article) {
   }
   var results = [];
   try {
-    var language = article.split(/:(.+)?/)[0];
-    var title = article.split(/:(.+)?/)[1];
+    var language;
+    var title;
+    if (article.indexOf(':') !== -1) {
+      language = article.split(/:(.+)?/)[0];
+      title = article.split(/:(.+)?/)[1];
+    } else {
+      language = DEFAULT_LANGUAGE;
+      title = article;
+    }
     if (!title) {
       return '';
     }
@@ -655,8 +748,15 @@ function WIKIDATAFACTS(article, opt_multiObjectMode) {
   }
   var results = [];
   try {
-    var language = article.split(/:(.+)?/)[0];
-    var title = article.split(/:(.+)?/)[1];
+    var language;
+    var title;
+    if (article.indexOf(':') !== -1) {
+      language = article.split(/:(.+)?/)[0];
+      title = article.split(/:(.+)?/)[1];
+    } else {
+      language = DEFAULT_LANGUAGE;
+      title = article;
+    }
     if (!title) {
       return '';
     }
@@ -739,8 +839,15 @@ function WIKIPAGEVIEWS(article, opt_start, opt_end, opt_sumOnly) {
   var results = [];
   var sum = 0;
   try {
-    var language = article.split(/:(.+)?/)[0];
-    var title = article.split(/:(.+)?/)[1];
+    var language;
+    var title;
+    if (article.indexOf(':') !== -1) {
+      language = article.split(/:(.+)?/)[0];
+      title = article.split(/:(.+)?/)[1];
+    } else {
+      language = DEFAULT_LANGUAGE;
+      title = article;
+    }
     if (!title) {
       return '';
     }
@@ -821,8 +928,15 @@ function WIKIPAGEEDITS(article, opt_start, opt_end) {
   }
   var results = [];
   try {
-    var language = article.split(/:(.+)?/)[0];
-    var title = article.split(/:(.+)?/)[1];
+    var language;
+    var title;
+    if (article.indexOf(':') !== -1) {
+      language = article.split(/:(.+)?/)[0];
+      title = article.split(/:(.+)?/)[1];
+    } else {
+      language = DEFAULT_LANGUAGE;
+      title = article;
+    }
     if (!title) {
       return '';
     }
@@ -872,40 +986,6 @@ function WIKIPAGEEDITS(article, opt_start, opt_end) {
 }
 
 /**
- * Returns Google Suggest results for the given keyword.
- *
- * @param {string} keyword The keyword to get suggestions for.
- * @param {string=} opt_language The language to get suggestions in, defaults to "en" (optional).
- * @return {Array<string>} The list of suggestions.
- * @customfunction
- */
-function GOOGLESUGGEST(keyword, opt_language) {
-  'use strict';
-  if (!keyword) {
-    return '';
-  }
-  opt_language = opt_language || 'en';
-  var results = [];
-  try {
-    var url = 'https://suggestqueries.google.com/complete/search' +
-        '?output=toolbar' +
-        '&hl=' + opt_language +
-        '&q=' + encodeURIComponent(keyword);
-    var xml = UrlFetchApp.fetch(url, HEADERS).getContentText();
-    var document = XmlService.parse(xml);
-    var entries = document.getRootElement().getChildren('CompleteSuggestion');
-    for (var i = 0; i < entries.length; i++) {
-      var text = entries[i].getChild('suggestion').getAttribute('data')
-          .getValue();
-      results[i] = text;
-    }
-  } catch (e) {
-    // no-op
-  }
-  return results.length > 0 ? results : '';
-}
-
-/**
  * Returns Wikipedia article results for a query.
  *
  * @param {string} query The query in the format "language:Query" ("de:Berlin") to get search results for.
@@ -921,8 +1001,15 @@ function WIKISEARCH(query, opt_didYouMean, opt_namespaces) {
   }
   var results = [];
   try {
-    var language = query.split(/:(.+)?/)[0];
-    var title = query.split(/:(.+)?/)[1];
+    var language;
+    var title;
+    if (query.indexOf(':') !== -1) {
+      language = query.split(/:(.+)?/)[0];
+      title = query.split(/:(.+)?/)[1];
+    } else {
+      language = DEFAULT_LANGUAGE;
+      title = query;
+    }
     if (!title) {
       return '';
     }
@@ -972,8 +1059,15 @@ function WIKIDATAQID(article) {
   }
   var results = [];
   try {
-    var language = article.split(/:(.+)?/)[0];
-    var title = article.split(/:(.+)?/)[1];
+    var language;
+    var title;
+    if (article.indexOf(':') !== -1) {
+      language = article.split(/:(.+)?/)[0];
+      title = article.split(/:(.+)?/)[1];
+    } else {
+      language = DEFAULT_LANGUAGE;
+      title = article;
+    }
     if (!title) {
       return '';
     }
@@ -1010,6 +1104,50 @@ function WIKIQUARRY(queryId) {
     var json = JSON.parse(UrlFetchApp.fetch(url, HEADERS).getContentText());
     results[0] = json.headers;
     results = results.concat(json.rows);
+  } catch (e) {
+    // no-op
+  }
+  return results.length > 0 ? results : '';
+}
+
+/**
+ * Returns Google Suggest results for the given keyword.
+ *
+ * @param {string} query The query in the format "language:Query" ("de:Berlin") to get suggestions for.
+ * @return {Array<string>} The list of suggestions.
+ * @customfunction
+ */
+function GOOGLESUGGEST(query) {
+  'use strict';
+  if (!keyword) {
+    return '';
+  }
+  var results = [];
+  try {
+    var language;
+    var title;
+    if (query.indexOf(':') !== -1) {
+      language = query.split(/:(.+)?/)[0];
+      title = query.split(/:(.+)?/)[1];
+    } else {
+      language = DEFAULT_LANGUAGE;
+      title = query;
+    }
+    if (!title) {
+      return '';
+    }
+    var url = 'https://suggestqueries.google.com/complete/search' +
+        '?output=toolbar' +
+        '&hl=' + language +
+        '&q=' + encodeURIComponent(title);
+    var xml = UrlFetchApp.fetch(url, HEADERS).getContentText();
+    var document = XmlService.parse(xml);
+    var entries = document.getRootElement().getChildren('CompleteSuggestion');
+    for (var i = 0; i < entries.length; i++) {
+      var text = entries[i].getChild('suggestion').getAttribute('data')
+          .getValue();
+      results[i] = text;
+    }
   } catch (e) {
     // no-op
   }
