@@ -18,7 +18,7 @@
 /**
  * Runs tests with different input configurations
  */
-function runTests() {
+function runTests_() {
   'use strict';
 
   var checkResult = function(caller, result) {
