@@ -162,13 +162,12 @@ function WIKIARTICLESAROUND(articleOrPoint, radius, opt_includeDistance,
  *
  * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get translations for.
  * @param {Array<string>=} opt_targetLanguages The list of languages to limit the results to (optional).
- * @param {boolean=} opt_returnAsObject Whether to return the results as an object, defaults to false (optional).
  * @param {boolean=} opt_skipHeader Whether to skip the header, defaults to false (optional).
  * @return {Array<string>} The list of translations.
  * @customfunction
  */
-function WIKITRANSLATE(article, opt_targetLanguages, opt_returnAsObject,
-    opt_skipHeader) {
+function WIKITRANSLATE(article, opt_targetLanguages, opt_skipHeader,
+    _opt_returnAsObject) {
   'use strict';
   if (!article) {
     return '';
@@ -224,7 +223,7 @@ function WIKITRANSLATE(article, opt_targetLanguages, opt_returnAsObject,
   } catch (e) {
     // no-op
   }
-  if (opt_returnAsObject) {
+  if (_opt_returnAsObject) {
     return results;
   }
   var arrayResults = [];
@@ -243,16 +242,15 @@ function WIKITRANSLATE(article, opt_targetLanguages, opt_returnAsObject,
  *
  * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get translations and synonyms for.
  * @param {Array<string>=} opt_targetLanguages The list of languages to limit the results to (optional).
- * @param {boolean=} opt_returnAsObject Whether to return the results as an object, defaults to false (optional).
  * @return {Array<string>} The list of translations and synonyms.
  * @customfunction
  */
-function WIKIEXPAND(article, opt_targetLanguages, opt_returnAsObject) {
+function WIKIEXPAND(article, opt_targetLanguages) {
   'use strict';
   if (!article) {
     return '';
   }
-  var results = opt_returnAsObject ? {} : [];
+  var results = [];
   try {
     var language;
     var title;
@@ -274,21 +272,17 @@ function WIKIEXPAND(article, opt_targetLanguages, opt_returnAsObject) {
       temp[lang] = true;
     });
     opt_targetLanguages = Object.keys(temp);
-    var translations = WIKITRANSLATE(article, opt_targetLanguages, true);
+    var translations = WIKITRANSLATE(article, opt_targetLanguages, false, true);
     var i = 0;
     for (var lang in translations) {
       var synonyms = WIKISYNONYMS(lang + ':' + translations[lang]);
-      if (opt_returnAsObject) {
-        results[lang] = [translations[lang]].concat(synonyms);
-      } else {
-        results[i] = [lang].concat(([translations[lang]].concat(synonyms)));
-      }
+      results[i] = [lang].concat(([translations[lang]].concat(synonyms)));
       i++;
     }
   } catch (e) {
     // no-op
   }
-  return opt_returnAsObject ? results : results;
+  return results;
 }
 
 /**
@@ -352,7 +346,7 @@ function WIKICATEGORYMEMBERS(category, opt_namespaces) {
   try {
     var language;
     var title;
-    if (category.indexOf(':') !== -1) {
+    if ((category.match(/:/g) || []).length > 1) {
       language = category.split(/:(.+)?/)[0];
       title = category.split(/:(.+)?/)[1];
     } else {
@@ -403,7 +397,7 @@ function WIKISUBCATEGORIES(category, opt_namespaces) {
   try {
     var language;
     var title;
-    if (category.indexOf(':') !== -1) {
+    if ((category.match(/:/g) || []).length > 1) {
       language = category.split(/:(.+)?/)[0];
       title = category.split(/:(.+)?/)[1];
     } else {
@@ -892,7 +886,7 @@ function WIKIPAGEVIEWS(article, opt_start, opt_end, opt_sumOnly) {
     // no-op
   }
   if (opt_sumOnly) {
-    return sum;
+    return [sum];
   } else {
     results.reverse(); // Order from new to old
     return results.length > 0 ? results : '';
@@ -1119,7 +1113,7 @@ function WIKIQUARRY(queryId) {
  */
 function GOOGLESUGGEST(query) {
   'use strict';
-  if (!keyword) {
+  if (!query) {
     return '';
   }
   var results = [];
