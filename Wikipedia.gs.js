@@ -878,7 +878,7 @@ function WIKIPAGEVIEWS(article, opt_start, opt_end, opt_sumOnly) {
         '/daily' +
         '/' + opt_start +
         '/' + opt_end;
-    var json = JSON.parse(UrlFetchApp.fetch(url + '&rand=' +
+    var json = JSON.parse(UrlFetchApp.fetch(url + '?rand=' +
         Math.random().toString().substr(2), HEADERS).getContentText());
     json.items.forEach(function(item) {
       if (opt_sumOnly) {
@@ -1115,7 +1115,7 @@ function WIKIQUARRY(queryId) {
   try {
     var url = 'http://quarry.wmflabs.org/query/' + queryId +
         '/result/latest/0/json';
-    var json = JSON.parse(UrlFetchApp.fetch(url + '&rand=' +
+    var json = JSON.parse(UrlFetchApp.fetch(url + '?rand=' +
         Math.random().toString().substr(2), HEADERS).getContentText());
     results[0] = json.headers;
     results = results.concat(json.rows);
