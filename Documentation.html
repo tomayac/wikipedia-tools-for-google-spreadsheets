@@ -647,6 +647,49 @@ Amsterdam
 …</code></pre>
       </section>
       <section>
+        <h2>WIKILINKSEARCH</h2>
+        <p>Returns Wikipedia articles that have a link that matches a given link pattern.</p>
+        <h3>Arguments</h3>
+        <table>
+          <tbody>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
+            </tr>
+            <tr>
+              <td>linkPattern</td>
+              <td><code>string</code></td>
+              <td>The link pattern to search for in the format "language:example.com" or "language:*.example.com".</td>
+            </tr>
+            <tr>
+              <td>opt_namespaces</td>
+              <td><code>string=</code></td>
+              <td>Only include pages in these namespaces (optional).</td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>Return Values</h3>
+        <table>
+          <tbody>
+            <tr>
+              <th scope="col">Type</th>
+              <th scope="col">Description</th>
+            </tr>
+            <tr>
+              <td><code>Array&lt;string&gt;</code></td>
+              <td>The list of articles that match the link pattern.</td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>Example</h3>
+      <pre class="code-example"><code>=WIKILINKSEARCH("en:berlin.de")</code></pre>
+      <pre class="code-result"><code>Theodor-Heuss-Platz&#9;http://berlin.de/ba-charlottenburg-wilmersdorf/bezirk/lexikon/theodorheussplatz.html
+Theodor-Heuss-Platz&#9;http://berlin.de/ba-charlottenburg-wilmersdorf/bezirk/lexikon/dt_amerikahaus.html
+Märchenbrunnen&#9;http://berlin.de/orte/sehenswuerdigkeiten/maerchenbrunnen/
+…</code></pre>
+      </section>
+      <section>
         <h2>WIKIGEOCOORDINATES</h2>
         <p>Returns Wikipedia geocoordinates for a Wikipedia article.</p>
         <h3>Arguments</h3>

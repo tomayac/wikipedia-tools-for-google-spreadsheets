@@ -624,7 +624,7 @@ function WIKIGEOCOORDINATES(article) {
     if (!title) {
       return '';
     }
-    var url = 'https://en.wikipedia.org/w/api.php' +
+    var url = 'https://' + language + '.wikipedia.org/w/api.php' +
         '?action=query' +
         '&prop=coordinates' +
         '&format=xml' +
@@ -639,6 +639,57 @@ function WIKIGEOCOORDINATES(article) {
     var latitude = coordinates.getAttribute('lat').getValue();
     var longitude = coordinates.getAttribute('lon').getValue();
     results = [[latitude, longitude]];
+  } catch (e) {
+    // no-op
+  }
+  return results.length > 0 ? results : '';
+}
+
+/**
+ * Returns Wikipedia articles that have a link that matches a given link pattern.
+ *
+ * @param {string} linkPattern The link pattern to search for in the format "language:example.com" or "language:*.example.com".
+ * @param {string=} opt_namespaces Only include pages in these namespaces (optional).
+ * @return {Array<string>} The list of articles that match the link pattern and the concrete link.
+ * @customfunction
+ */
+function WIKILINKSEARCH(linkPattern, opt_namespaces) {
+  'use strict';
+  if (!linkPattern) {
+    return '';
+  }
+  var results = [];
+  try {
+    var language;
+    var title;
+    if (linkPattern.indexOf(':') !== -1) {
+      language = linkPattern.split(/:(.+)?/)[0];
+      title = linkPattern.split(/:(.+)?/)[1];
+    } else {
+      language = DEFAULT_LANGUAGE;
+      title = linkPattern;
+    }
+    if (!title) {
+      return '';
+    }
+    var url = 'https://' + language + '.wikipedia.org/w/api.php' +
+        '?action=query' +
+        '&format=xml' +
+        '&list=exturlusage' +
+        '&eulimit=max' +
+        '&euprop=title%7Curl' +
+        '&euquery=' + encodeURIComponent(title) +
+        '&eunamespace=' + (opt_namespaces ?
+            encodeURIComponent(opt_namespaces) : '0');
+    var xml = UrlFetchApp.fetch(url, HEADERS).getContentText();
+    var document = XmlService.parse(xml);
+    var entries = document.getRootElement().getChild('query')
+        .getChild('exturlusage').getChildren('eu');
+    for (var i = 0; i < entries.length - 1; i++) {
+      var title = entries[i].getAttribute('title').getValue();
+      var url = entries[i].getAttribute('url').getValue();
+      results[i] = [title, url];
+    }
   } catch (e) {
     // no-op
   }
@@ -948,7 +999,7 @@ function WIKIPAGEEDITS(article, opt_start, opt_end) {
     if (typeof opt_end === 'object') {
       opt_end = getIsoDate(opt_end, 'T23:59:59');
     }
-    var url = 'https://en.wikipedia.org/w/api.php' +
+    var url = 'https://' + language + '.wikipedia.org/w/api.php' +
         '?action=query' +
         '&prop=revisions' +
         '&rvprop=size%7Ctimestamp' +
@@ -1099,7 +1150,7 @@ function WIKIQUARRY(queryId) {
   }
   var results = [];
   try {
-    var url = 'http://quarry.wmflabs.org/query/' + queryId +
+    var url = 'https://quarry.wmflabs.org/query/' + queryId +
         '/result/latest/0/json';
     var json = JSON.parse(UrlFetchApp.fetch(url + '?rand=' +
         Math.random().toString().substr(2), HEADERS).getContentText());

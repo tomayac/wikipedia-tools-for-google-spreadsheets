@@ -18,7 +18,7 @@
 /**
  * Runs tests with different input configurations
  */
-function runTests_() {
+function _runTests() {
   'use strict';
 
   var checkResult = function(caller, result) {
@@ -28,6 +28,7 @@ function runTests_() {
 
   var article = 'en:Berlin';
   var articleOrPoint = ['en:Berlin', '52.51666667,13.38333333'];
+  var linkPattern = 'en:github.com';
   var query = 'en:Berlin';
   var queryId = 1226;
   var fileName = 'en:Flag of Berlin.svg';
@@ -100,6 +101,12 @@ function runTests_() {
   checkResult('WIKIMUTUALLINKS', WIKIMUTUALLINKS(article.replace('en:', '')));
   checkResult('WIKIMUTUALLINKS', WIKIMUTUALLINKS(article, opt_namespaces));
   checkResult('WIKIMUTUALLINKS', WIKIMUTUALLINKS(article.replace('en:', ''),
+      opt_namespaces));
+
+  checkResult('WIKILINKSEARCH', WIKILINKSEARCH(linkPattern));
+  checkResult('WIKILINKSEARCH', WIKILINKSEARCH(linkPattern.replace('en:', '')));
+  checkResult('WIKILINKSEARCH', WIKILINKSEARCH(linkPattern, opt_namespaces));
+  checkResult('WIKILINKSEARCH', WIKILINKSEARCH(linkPattern.replace('en:', ''),
       opt_namespaces));
 
   checkResult('WIKIEXPAND', WIKIEXPAND(article));
