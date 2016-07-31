@@ -42,6 +42,7 @@ function _runTests() {
   var opt_didYouMean = true;
   var opt_skipHeader = true;
   var opt_sumOnly = true;
+  var opt_protocol = 'https';
   var opt_start = new Date(new Date() - 7 * 24 * 60 * 60 * 1000);
   var opt_end = new Date(new Date() - 1 * 24 * 60 * 60 * 1000);
 
@@ -105,9 +106,13 @@ function _runTests() {
 
   checkResult('WIKILINKSEARCH', WIKILINKSEARCH(linkPattern));
   checkResult('WIKILINKSEARCH', WIKILINKSEARCH(linkPattern.replace('en:', '')));
-  checkResult('WIKILINKSEARCH', WIKILINKSEARCH(linkPattern, opt_namespaces));
+  checkResult('WIKILINKSEARCH', WIKILINKSEARCH(linkPattern, opt_protocol));
   checkResult('WIKILINKSEARCH', WIKILINKSEARCH(linkPattern.replace('en:', ''),
+      opt_protocol));
+  checkResult('WIKILINKSEARCH', WIKILINKSEARCH(linkPattern, opt_protocol,
       opt_namespaces));
+  checkResult('WIKILINKSEARCH', WIKILINKSEARCH(linkPattern.replace('en:', ''),
+      opt_protocol, opt_namespaces));
 
   checkResult('WIKIEXPAND', WIKIEXPAND(article));
   checkResult('WIKIEXPAND', WIKIEXPAND(article.replace('en:', '')));

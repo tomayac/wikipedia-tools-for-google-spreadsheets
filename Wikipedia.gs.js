@@ -649,11 +649,12 @@ function WIKIGEOCOORDINATES(article) {
  * Returns Wikipedia articles that have a link that matches a given link pattern.
  *
  * @param {string} linkPattern The link pattern to search for in the format "language:example.com" or "language:*.example.com".
+ * @param {string=} opt_protocol Protocol of the link, defaults to "http" (optional).
  * @param {string=} opt_namespaces Only include pages in these namespaces (optional).
  * @return {Array<string>} The list of articles that match the link pattern and the concrete link.
  * @customfunction
  */
-function WIKILINKSEARCH(linkPattern, opt_namespaces) {
+function WIKILINKSEARCH(linkPattern, opt_protocol, opt_namespaces) {
   'use strict';
   if (!linkPattern) {
     return '';
@@ -678,6 +679,7 @@ function WIKILINKSEARCH(linkPattern, opt_namespaces) {
         '&list=exturlusage' +
         '&eulimit=max' +
         '&euprop=title%7Curl' +
+        '&euprotocol=' + (opt_protocol ? opt_protocol : 'http') +
         '&euquery=' + encodeURIComponent(title) +
         '&eunamespace=' + (opt_namespaces ?
             encodeURIComponent(opt_namespaces) : '0');
