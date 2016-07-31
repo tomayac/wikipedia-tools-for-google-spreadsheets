@@ -685,7 +685,7 @@ function WIKILINKSEARCH(linkPattern, opt_namespaces) {
     var document = XmlService.parse(xml);
     var entries = document.getRootElement().getChild('query')
         .getChild('exturlusage').getChildren('eu');
-    for (var i = 0; i < entries.length - 1; i++) {
+    for (var i = 0; i < entries.length; i++) {
       var title = entries[i].getAttribute('title').getValue();
       var url = entries[i].getAttribute('url').getValue();
       results[i] = [title, url];
@@ -1012,7 +1012,7 @@ function WIKIPAGEEDITS(article, opt_start, opt_end) {
     var document = XmlService.parse(xml);
     var entries = document.getRootElement().getChild('query').getChild('pages')
         .getChild('page').getChild('revisions').getChildren('rev');
-    for (var i = 0; i < entries.length - 1; i++) {
+    for (var i = 0; i < entries.length - 1 /* - 1 for the delta */; i++) {
       var timestamp = entries[i].getAttribute('timestamp').getValue().replace(
           /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z$/,
           '$1-$2-$3-$4-$5-$6').split('-');
