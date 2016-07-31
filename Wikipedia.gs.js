@@ -1157,7 +1157,7 @@ function WIKIPAGEVIEWSTOP(project, opt_access, opt_date) {
     var json = JSON.parse(UrlFetchApp.fetch(url, HEADERS).getContentText());
     json.items[0].articles.forEach(function(article) {
       results.push([
-        article.article,
+        article.article.replace(/_/g, ' '),
         article.views
       ]);
     });
