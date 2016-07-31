@@ -26,6 +26,7 @@ function _runTests() {
         '✅ OK: ' + JSON.stringify(result) : '❌ Error'));
   };
 
+  var project = 'en.wikipedia';
   var article = 'en:Berlin';
   var articleOrPoint = ['en:Berlin', '52.51666667,13.38333333'];
   var linkPattern = 'en:github.com';
@@ -45,6 +46,11 @@ function _runTests() {
   var opt_protocol = 'https';
   var opt_start = new Date(new Date() - 7 * 24 * 60 * 60 * 1000);
   var opt_end = new Date(new Date() - 1 * 24 * 60 * 60 * 1000);
+  var opt_date = new Date(new Date() - 1 * 24 * 60 * 60 * 1000);
+  var opt_access = 'all-access';
+  var opt_accessSite = 'all-sites';
+  var opt_agent = 'all-agents';
+  var opt_granularity = 'daily';
 
   checkResult('WIKIQUARRY', WIKIQUARRY(queryId));
 
@@ -173,6 +179,27 @@ function _runTests() {
       opt_sumOnly));
   checkResult('WIKIPAGEVIEWS', WIKIPAGEVIEWS(article.replace('en:', ''),
       opt_start, opt_end, opt_sumOnly));
+
+  checkResult('WIKIPAGEVIEWSPERARTICLE', WIKIPAGEVIEWSPERARTICLE(project,
+      article.replace('en:', '')));
+  checkResult('WIKIPAGEVIEWSPERARTICLE', WIKIPAGEVIEWSPERARTICLE(project,
+      article.replace('en:', ''), opt_access, opt_agent, opt_granularity,
+      opt_start, opt_end));
+  checkResult('WIKIPAGEVIEWSPERARTICLE', WIKIPAGEVIEWSPERARTICLE(project,
+      article.replace('en:', ''), opt_access, opt_agent, opt_granularity,
+      opt_start, opt_end, opt_sumOnly));
+
+  checkResult('WIKIPAGEVIEWSAGGREGATE', WIKIPAGEVIEWSAGGREGATE(project));
+  checkResult('WIKIPAGEVIEWSAGGREGATE', WIKIPAGEVIEWSAGGREGATE(project,
+      opt_access, opt_agent, opt_granularity, opt_start, opt_end));
+
+  checkResult('WIKIPAGEVIEWSTOP', WIKIPAGEVIEWSTOP(project));
+  checkResult('WIKIPAGEVIEWSTOP', WIKIPAGEVIEWSTOP(project, opt_access,
+      opt_date));
+
+  checkResult('WIKIUNIQUEDEVICES', WIKIUNIQUEDEVICES(project));
+  checkResult('WIKIUNIQUEDEVICES', WIKIUNIQUEDEVICES(project, opt_accessSite,
+      opt_granularity, opt_start, opt_end));
 
   checkResult('WIKIPAGEEDITS', WIKIPAGEEDITS(article));
   checkResult('WIKIPAGEEDITS', WIKIPAGEEDITS(article.replace('en:', '')));

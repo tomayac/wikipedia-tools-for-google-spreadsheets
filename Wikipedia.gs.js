@@ -864,8 +864,8 @@ function WIKIDATAFACTS(article, opt_multiObjectMode) {
  * Returns Wikipedia pageviews statistics for a Wikipedia article.
  *
  * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get pageviews statistics for.
- * @param {string=} opt_start The start date in the format "YYYYMMDD" ("2007-06-08") since when pageviews statistics should be retrieved from (optional).
- * @param {string=} opt_end The end date in the format "YYYYMMDD" ("2007-06-08") until when pageviews statistics should be retrieved to (optional).
+ * @param {string=} opt_start The start date in the format "YYYYMMDD" ("20070608") since when pageviews statistics should be retrieved from (optional).
+ * @param {string=} opt_end The end date in the format "YYYYMMDD" ("20070608") until when pageviews statistics should be retrieved to (optional).
  * @param {boolean=} opt_sumOnly Whether to only return the sum of all pageviews in the requested period (optional).
  * @return {Array<number>} The list of pageviews between start and end per day.
  * @customfunction
@@ -875,7 +875,7 @@ function WIKIPAGEVIEWS(article, opt_start, opt_end, opt_sumOnly) {
 
   var getIsoDate = function(date) {
     var date = new Date(date);
-    var year = date.getFullYear();
+    var year = date.getFullYear().toString();
     var month = (date.getMonth() + 1) < 10 ?
         '0' + (date.getMonth() + 1) :
         (date.getMonth() + 1).toString();
@@ -920,8 +920,7 @@ function WIKIPAGEVIEWS(article, opt_start, opt_end, opt_sumOnly) {
         '/daily' +
         '/' + opt_start +
         '/' + opt_end;
-    var json = JSON.parse(UrlFetchApp.fetch(url + '?rand=' +
-        Math.random().toString().substr(2), HEADERS).getContentText());
+    var json = JSON.parse(UrlFetchApp.fetch(url, HEADERS).getContentText());
     json.items.forEach(function(item) {
       if (opt_sumOnly) {
         sum += item.views;
@@ -950,6 +949,291 @@ function WIKIPAGEVIEWS(article, opt_start, opt_end, opt_sumOnly) {
     results.reverse(); // Order from new to old
     return results.length > 0 ? results : '';
   }
+}
+
+/**
+ * Returns pageviews statistics for individual pages.
+ *
+ * @param {string} project The Wikimedia project to get pageviews statistics for.
+ * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get pageviews statistics for.
+ * @param {string=} opt_access The access method, defaults to "all-access" (optional).
+ * @param {string=} opt_agent The agent, defaults to "all-agents" (optional).
+ * @param {string=} opt_granularity The granularity, defaults to "daily" (optional).
+ * @param {string=} opt_start The start date in the format "YYYYMMDD" ("20070608") since when pageviews statistics should be retrieved from (optional).
+ * @param {string=} opt_end The end date in the format "YYYYMMDD" ("20070608") until when pageviews statistics should be retrieved to (optional).
+ * @param {boolean=} opt_sumOnly Whether to only return the sum of all pageviews in the requested period (optional).
+ * @return {Array<number>} The list of pageviews between start and end.
+ * @customfunction
+ */
+function WIKIPAGEVIEWSPERARTICLE(project, article, opt_access,
+    opt_agent, opt_granularity, opt_start, opt_end, opt_sumOnly) {
+  'use strict';
+
+  var getIsoDate = function(date) {
+    var date = new Date(date);
+    var year = date.getFullYear().toString();
+    var month = (date.getMonth() + 1) < 10 ?
+        '0' + (date.getMonth() + 1) :
+        (date.getMonth() + 1).toString();
+    var day = date.getDate() < 10 ?
+        '0' + date.getDate() :
+        date.getDate().toString();
+    return year + month + day;
+  };
+
+  if (!project) {
+    return '';
+  }
+  if (!article) {
+    return '';
+  }
+  var results = [];
+  var sum = 0;
+  try {
+    opt_start = opt_start || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    if (typeof opt_start === 'object') {
+      opt_start = getIsoDate(opt_start);
+    }
+    opt_end = opt_end || new Date(Date.now() - 1 * 24 * 60 * 60 * 1000);
+    if (typeof opt_end === 'object') {
+      opt_end = getIsoDate(opt_end);
+    }
+    var url = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/' +
+        'per-article' +
+        '/' + project +
+        '/' + (opt_access ? opt_access : 'all-access') +
+        '/' + (opt_agent ? opt_agent : 'all-agents') +
+        '/' + encodeURIComponent(article.replace(/\s/g, '_')) +
+        '/' + (opt_granularity ? opt_granularity : 'daily') +
+        '/' + opt_start +
+        '/' + opt_end;
+    var json = JSON.parse(UrlFetchApp.fetch(url, HEADERS).getContentText());
+    json.items.forEach(function(item) {
+      if (opt_sumOnly) {
+        sum += item.views;
+      } else {
+        var timestamp = item.timestamp.replace(/^(\d{4})(\d{2})(\d{2})(\d{2})$/,
+            '$1-$2-$3-$4').split('-');
+        timestamp = new Date(Date.UTC(
+            parseInt(timestamp[0], 10), // Year
+            parseInt(timestamp[1], 10) - 1, // Month
+            parseInt(timestamp[2], 10), // Day
+            parseInt(timestamp[3], 10), // Hour
+            0, // Minute
+            0)); // Second))
+        results.push([
+          timestamp,
+          item.views
+        ]);
+      }
+    });
+  } catch (e) {
+    // no-op
+  }
+  if (opt_sumOnly) {
+    return [sum];
+  } else {
+    results.reverse(); // Order from new to old
+    return results.length > 0 ? results : '';
+  }
+}
+
+/**
+ * Returns aggregated pageviews statistics for a project.
+ *
+ * @param {string} project The Wikimedia project to get pageviews statistics for.
+ * @param {string=} opt_access The access method, defaults to "all-access" (optional).
+ * @param {string=} opt_agent The agent, defaults to "all-agents" (optional).
+ * @param {string=} opt_granularity The granularity, defaults to "daily" (optional).
+ * @param {string=} opt_start The start date in the format "YYYYMMDDHH" ("2007060800") since when pageviews statistics should be retrieved from (optional).
+ * @param {string=} opt_end The end date in the format "YYYYMMDDHH" ("2007060800") until when pageviews statistics should be retrieved to (optional).
+ * @return {Array<number>} The list of aggregated pageviews between start and end.
+ * @customfunction
+ */
+function WIKIPAGEVIEWSAGGREGATE(project, opt_access, opt_agent, opt_granularity,
+    opt_start, opt_end) {
+  'use strict';
+
+  var getIsoDateWithHour = function(date) {
+    var date = new Date(date);
+    var year = date.getFullYear().toString();
+    var month = (date.getMonth() + 1) < 10 ?
+        '0' + (date.getMonth() + 1) :
+        (date.getMonth() + 1).toString();
+    var day = date.getDate() < 10 ?
+        '0' + date.getDate() :
+        date.getDate().toString();
+    return year + month + day + '00';
+  };
+
+  if (!project) {
+    return '';
+  }
+  var results = [];
+  try {
+    opt_start = opt_start || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    if (typeof opt_start === 'object') {
+      opt_start = getIsoDateWithHour(opt_start);
+    }
+    opt_end = opt_end || new Date(Date.now() - 1 * 24 * 60 * 60 * 1000);
+    if (typeof opt_end === 'object') {
+      opt_end = getIsoDateWithHour(opt_end);
+    }
+    var url = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/' +
+        'aggregate' +
+        '/' + project +
+        '/' + (opt_access ? opt_access : 'all-access') +
+        '/' + (opt_agent ? opt_agent : 'all-agents') +
+        '/' + (opt_granularity ? opt_granularity : 'daily') +
+        '/' + opt_start +
+        '/' + opt_end;
+    var json = JSON.parse(UrlFetchApp.fetch(url, HEADERS).getContentText());
+    json.items.forEach(function(item) {
+      var timestamp = item.timestamp.replace(/^(\d{4})(\d{2})(\d{2})(\d{2})$/,
+          '$1-$2-$3-$4').split('-');
+      timestamp = new Date(Date.UTC(
+          parseInt(timestamp[0], 10), // Year
+          parseInt(timestamp[1], 10) - 1, // Month
+          parseInt(timestamp[2], 10), // Day
+          parseInt(timestamp[3], 10), // Hour
+          0, // Minute
+          0)); // Second))
+      results.push([
+        timestamp,
+        item.views
+      ]);
+    });
+  } catch (e) {
+    // no-op
+  }
+  results.reverse(); // Order from new to old
+  return results.length > 0 ? results : '';
+}
+
+/**
+ * Returns most viewed pages for a project.
+ *
+ * @param {string} project The Wikimedia project to get pageviews statistics for.
+ * @param {string=} opt_access The access method, defaults to "all-access" (optional).
+ * @param {string=} opt_date The date in the format "YYYYMMDD" ("20070608") for which pageviews statistics should be retrieved (optional).
+ * @return {Array<number>} The list of the most viewed pages.
+ * @customfunction
+ */
+function WIKIPAGEVIEWSTOP(project, opt_access, opt_date) {
+  'use strict';
+
+  var getIsoDate = function(date) {
+    var date = new Date(date);
+    var year = date.getFullYear().toString();
+    var month = (date.getMonth() + 1) < 10 ?
+        '0' + (date.getMonth() + 1) :
+        (date.getMonth() + 1).toString();
+    var day = date.getDate() < 10 ?
+        '0' + date.getDate() :
+        date.getDate().toString();
+    return year + month + day;
+  };
+
+  if (!project) {
+    return '';
+  }
+  var results = [];
+  var sum = 0;
+  try {
+    opt_date = opt_date || new Date(Date.now() - 1 * 24 * 60 * 60 * 1000);
+    if (typeof opt_date === 'object') {
+      opt_date = getIsoDate(opt_date);
+    }
+    var year = opt_date.substr(0, 4);
+    var month = opt_date.substring(4, 6);
+    var day = opt_date.substring(6, 8);
+    var url = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/' +
+        'top' +
+        '/' + project +
+        '/' + (opt_access ? opt_access : 'all-access') +
+        '/' + year +
+        '/' + month +
+        '/' + day;
+    var json = JSON.parse(UrlFetchApp.fetch(url, HEADERS).getContentText());
+    json.items[0].articles.forEach(function(article) {
+      results.push([
+        article.article,
+        article.views
+      ]);
+    });
+  } catch (e) {
+    // no-op
+  }
+  return results.length > 0 ? results : '';
+}
+
+/**
+ * Returns the number of unique devices for a project.
+ *
+ * @param {string} project The Wikimedia project to get pageviews statistics for.
+ * @param {string=} opt_accessSite The accesses sites, defaults to "all-sites" (optional).
+ * @param {string=} opt_granularity The granularity, defaults to "daily" (optional).
+ * @param {string=} opt_start The start date in the format "YYYYMMDD" ("20070608") since when pageviews statistics should be retrieved from (optional).
+ * @param {string=} opt_end The end date in the format "YYYYMMDD" ("20070608") until when pageviews statistics should be retrieved to (optional).
+ * @return {Array<number>} The list of unique devices between start and end.
+ * @customfunction
+ */
+function WIKIUNIQUEDEVICES(project, opt_accessSite, opt_granularity, opt_start,
+    opt_end) {
+  'use strict';
+
+  var getIsoDate = function(date) {
+    var date = new Date(date);
+    var year = date.getFullYear().toString();
+    var month = (date.getMonth() + 1) < 10 ?
+        '0' + (date.getMonth() + 1) :
+        (date.getMonth() + 1).toString();
+    var day = date.getDate() < 10 ?
+        '0' + date.getDate() :
+        date.getDate().toString();
+    return year + month + day;
+  };
+
+  if (!project) {
+    return '';
+  }
+  var results = [];
+  var sum = 0;
+  try {
+    opt_start = opt_start || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    if (typeof opt_start === 'object') {
+      opt_start = getIsoDate(opt_start);
+    }
+    opt_end = opt_end || new Date(Date.now() - 1 * 24 * 60 * 60 * 1000);
+    if (typeof opt_end === 'object') {
+      opt_end = getIsoDate(opt_end);
+    }
+    var url = 'https://wikimedia.org/api/rest_v1/metrics/unique-devices' +
+        '/' + project +
+        '/' + (opt_accessSite ? opt_accessSite : 'all-sites') +
+        '/' + (opt_granularity ? opt_granularity : 'daily') +
+        '/' + opt_start +
+        '/' + opt_end;
+    var json = JSON.parse(UrlFetchApp.fetch(url, HEADERS).getContentText());
+    json.items.forEach(function(item) {
+      var timestamp = item.timestamp.replace(/^(\d{4})(\d{2})(\d{2})$/,
+          '$1-$2-$3').split('-');
+      timestamp = new Date(Date.UTC(
+          parseInt(timestamp[0], 10), // Year
+          parseInt(timestamp[1], 10) - 1, // Month
+          parseInt(timestamp[2], 10), // Day
+          0, // Hour
+          0, // Minute
+          0)); // Second))
+      results.push([
+        timestamp,
+        item.devices
+      ]);
+    });
+  } catch (e) {
+    // no-op
+  }
+  return results.length > 0 ? results : '';
 }
 
 /**
@@ -1154,8 +1438,7 @@ function WIKIQUARRY(queryId) {
   try {
     var url = 'https://quarry.wmflabs.org/query/' + queryId +
         '/result/latest/0/json';
-    var json = JSON.parse(UrlFetchApp.fetch(url + '?rand=' +
-        Math.random().toString().substr(2), HEADERS).getContentText());
+    var json = JSON.parse(UrlFetchApp.fetch(url, HEADERS).getContentText());
     results[0] = json.headers;
     results = results.concat(json.rows);
   } catch (e) {
