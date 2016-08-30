@@ -28,6 +28,7 @@ function _runTests() {
 
   var project = 'en.wikipedia';
   var article = 'en:Berlin';
+  var qid = 'Q64';
   var articleOrPoint = ['en:Berlin', '52.51666667,13.38333333'];
   var linkPattern = 'en:github.com';
   var query = 'en:Berlin';
@@ -169,6 +170,11 @@ function _runTests() {
       opt_multiObjectMode[0]));
   checkResult('WIKIDATAFACTS', WIKIDATAFACTS(article.replace('en:', ''),
       opt_multiObjectMode[1]));
+
+  checkResult('WIKIDATALABEL', WIKIDATALABEL(qid));
+  checkResult('WIKIDATALABEL', WIKIDATALABEL(qid, opt_targetLanguage));
+  checkResult('WIKIDATALABEL', WIKIDATALABEL(qid, opt_targetLanguages));
+  checkResult('WIKIDATALABEL', WIKIDATALABEL(qid, 'all'));
 
   checkResult('WIKIPAGEVIEWS', WIKIPAGEVIEWS(article));
   checkResult('WIKIPAGEVIEWS', WIKIPAGEVIEWS(article.replace('en:', '')));
