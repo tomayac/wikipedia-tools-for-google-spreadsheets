@@ -571,13 +571,18 @@ Category:All articles with failed verification
             <tr>
               <td>article</td>
               <td><code>string</code></td>
-              <td>The Wikipedia article in the format "language:Article_Title" ("de:Berlin") or the Wikidata qid in the format "qid" ("Q42") to get Wikidata facts for.</td>
+              <td>The Wikipedia article in the format "language:Article_Title" ("de:Berlin") or the Wikidata item's qid in the format "qid" ("Q42") to get Wikidata facts for.</td>
             </tr>
             <tr>
               <td>opt_multiObj</td>
               <td><code>string=</code></td>
               <td>Whether to return all object values (pass <span class="inline-code">all</span>) or just the first (pass <span class="inline-code">first</span>)
               when there are more than one object values (optional).</td>
+            </tr>
+            <tr>
+              <td>opt_properties</td>
+              <td><code>Array&lt;string&gt;</code></td>
+              <td>opt_properties Limit the resulting facts to a list of properties (optional).</td>
             </tr>
           </tbody>
         </table>

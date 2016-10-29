@@ -41,6 +41,8 @@ function _runTests() {
   var opt_includeDistance = true;
   var radius = 1000;
   var opt_multiObjectMode = ['all', 'first'];
+  var opt_property = 'P31';
+  var opt_properties = ['P31', 'P17'];
   var opt_didYouMean = true;
   var opt_skipHeader = true;
   var opt_sumOnly = true;
@@ -170,10 +172,17 @@ function _runTests() {
       opt_multiObjectMode[0]));
   checkResult('WIKIDATAFACTS', WIKIDATAFACTS(article.replace('en:', ''),
       opt_multiObjectMode[1]));
-
   checkResult('WIKIDATAFACTS', WIKIDATAFACTS(qid));
   checkResult('WIKIDATAFACTS', WIKIDATAFACTS(article, opt_multiObjectMode[0]));
   checkResult('WIKIDATAFACTS', WIKIDATAFACTS(article, opt_multiObjectMode[1]));
+  checkResult('WIKIDATAFACTS', WIKIDATAFACTS(article, opt_multiObjectMode[0],
+      opt_property));
+  checkResult('WIKIDATAFACTS', WIKIDATAFACTS(article, opt_multiObjectMode[1],
+      opt_property));
+  checkResult('WIKIDATAFACTS', WIKIDATAFACTS(article, opt_multiObjectMode[0],
+      opt_properties));
+  checkResult('WIKIDATAFACTS', WIKIDATAFACTS(article, opt_multiObjectMode[1],
+      opt_properties));
 
   checkResult('WIKIDATALABEL', WIKIDATALABEL(qid));
   checkResult('WIKIDATALABEL', WIKIDATALABEL(qid, opt_targetLanguage));

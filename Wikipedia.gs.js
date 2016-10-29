@@ -703,10 +703,11 @@ function WIKILINKSEARCH(linkPattern, opt_protocol, opt_namespaces) {
  *
  * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") or the Wikidata entity in the format "qid" ("Q42") to get Wikidata facts for.
  * @param {string=} opt_multiObjectMode Whether to return all object values (pass "all") or just the first (pass "first") when there are more than one object values (optional).
+ * @param {Array<string>} opt_properties Limit the resulting facts to a list of properties (optional).
  * @return {Array<string>} The list of Wikidata facts.
  * @customfunction
  */
-function WIKIDATAFACTS(article, opt_multiObjectMode) {
+function WIKIDATAFACTS(article, opt_multiObjectMode, opt_properties) {
   'use strict';
 
   var simplifyClaims = function(claims) {
@@ -798,6 +799,9 @@ function WIKIDATAFACTS(article, opt_multiObjectMode) {
   if (!article) {
     return '';
   }
+  opt_properties = opt_properties || [];
+  opt_properties = Array.isArray(opt_properties) ?
+      opt_properties : [opt_properties];
   var results = [];
   try {
     var language;
@@ -832,6 +836,11 @@ function WIKIDATAFACTS(article, opt_multiObjectMode) {
     var qids = [];
     var simplifiedClaims = simplifyClaims(json.entities[entity].claims);
     var properties = Object.keys(simplifiedClaims);
+    if (opt_properties.length) {
+      properties = properties.filter(function(property) {
+        return opt_properties.indexOf(property) !== -1;
+      });
+    }
     var labels = getPropertyAndEntityLabels(properties.concat(qids));
     for (var claim in simplifiedClaims) {
       var claims = simplifiedClaims[claim].filter(function(value) {
