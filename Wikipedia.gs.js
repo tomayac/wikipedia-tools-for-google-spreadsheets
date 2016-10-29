@@ -701,7 +701,7 @@ function WIKILINKSEARCH(linkPattern, opt_protocol, opt_namespaces) {
 /**
  * Returns Wikidata facts for a Wikipedia article.
  *
- * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get Wikidata facts for.
+ * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") or the Wikidata entity in the format "qid" ("Q42") to get Wikidata facts for.
  * @param {string=} opt_multiObjectMode Whether to return all object values (pass "all") or just the first (pass "first") when there are more than one object values (optional).
  * @return {Array<string>} The list of Wikidata facts.
  * @customfunction
@@ -812,12 +812,21 @@ function WIKIDATAFACTS(article, opt_multiObjectMode) {
     if (!title) {
       return '';
     }
-    var url = 'https://wikidata.org/w/api.php' +
-        '?action=wbgetentities' +
-        '&sites=' + language + 'wiki' +
-        '&format=json' +
-        '&props=claims' +
-        '&titles=' + encodeURIComponent(title.replace(/\s/g, '_'));
+    var url;
+    if (/^Q\d+$/.test(title)) {
+      url = 'https://www.wikidata.org/w/api.php' +
+          '?action=wbgetentities' +
+          '&format=json' +
+          '&props=claims' +
+          '&ids=' + title;
+    } else {
+      url = 'https://wikidata.org/w/api.php' +
+          '?action=wbgetentities' +
+          '&sites=' + language + 'wiki' +
+          '&format=json' +
+          '&props=claims' +
+          '&titles=' + encodeURIComponent(title.replace(/\s/g, '_'));
+    }
     var json = JSON.parse(UrlFetchApp.fetch(url, HEADERS).getContentText());
     var entity = Object.keys(json.entities)[0];
     var qids = [];

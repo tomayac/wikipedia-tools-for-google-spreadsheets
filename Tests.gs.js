@@ -171,6 +171,10 @@ function _runTests() {
   checkResult('WIKIDATAFACTS', WIKIDATAFACTS(article.replace('en:', ''),
       opt_multiObjectMode[1]));
 
+  checkResult('WIKIDATAFACTS', WIKIDATAFACTS(qid));
+  checkResult('WIKIDATAFACTS', WIKIDATAFACTS(article, opt_multiObjectMode[0]));
+  checkResult('WIKIDATAFACTS', WIKIDATAFACTS(article, opt_multiObjectMode[1]));
+
   checkResult('WIKIDATALABEL', WIKIDATALABEL(qid));
   checkResult('WIKIDATALABEL', WIKIDATALABEL(qid, opt_targetLanguage));
   checkResult('WIKIDATALABEL', WIKIDATALABEL(qid, opt_targetLanguages));
