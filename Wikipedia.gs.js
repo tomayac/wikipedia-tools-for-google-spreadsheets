@@ -802,6 +802,11 @@ function WIKIDATAFACTS(article, opt_multiObjectMode, opt_properties) {
   opt_properties = opt_properties || [];
   opt_properties = Array.isArray(opt_properties) ?
       opt_properties : [opt_properties];
+  var temp = {};
+  opt_properties.forEach(function(prop) {
+    temp[prop] = true;
+  });
+  opt_properties = Object.keys(temp);
   var results = [];
   try {
     var language;
