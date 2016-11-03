@@ -184,10 +184,15 @@ function _runTests() {
   checkResult('WIKIDATAFACTS', WIKIDATAFACTS(article, opt_multiObjectMode[1],
       opt_properties));
 
-  checkResult('WIKIDATALABEL', WIKIDATALABEL(qid));
-  checkResult('WIKIDATALABEL', WIKIDATALABEL(qid, opt_targetLanguage));
-  checkResult('WIKIDATALABEL', WIKIDATALABEL(qid, opt_targetLanguages));
-  checkResult('WIKIDATALABEL', WIKIDATALABEL(qid, 'all'));
+  checkResult('WIKIDATALABELS', WIKIDATALABELS(qid));
+  checkResult('WIKIDATALABELS', WIKIDATALABELS(qid, opt_targetLanguage));
+  checkResult('WIKIDATALABELS', WIKIDATALABELS(qid, opt_targetLanguages));
+  checkResult('WIKIDATALABELS', WIKIDATALABELS(qid, 'all'));
+
+  checkResult('WIKIDATADESCRIPTIONS', WIKIDATADESCRIPTIONS(qid));
+  checkResult('WIKIDATADESCRIPTIONS', WIKIDATADESCRIPTIONS(qid, opt_targetLanguage));
+  checkResult('WIKIDATADESCRIPTIONS', WIKIDATADESCRIPTIONS(qid, opt_targetLanguages));
+  checkResult('WIKIDATADESCRIPTIONS', WIKIDATADESCRIPTIONS(qid, 'all'));
 
   checkResult('WIKIPAGEVIEWS', WIKIPAGEVIEWS(article));
   checkResult('WIKIPAGEVIEWS', WIKIPAGEVIEWS(article.replace('en:', '')));

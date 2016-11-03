@@ -789,7 +789,7 @@ Märchenbrunnen&#9;&#9;http://berlin.de/orte/sehenswuerdigkeiten/maerchenbrunnen
           </tr>
           <tr>
             <td>opt_didYouMean</td>
-            <td><code>boolean=</code></td>
+            <td><code>string=</code></td>
             <td>Whether to return a "did you mean" suggestion, defaults to false (optional).</td>
           </tr>
           <tr>
@@ -858,8 +858,8 @@ Greater Berlin Act
       <pre class="code-result"><code>Q64</code></pre>
     </section>
     <section>
-      <h2>WIKIDATALABEL</h2>
-      <p>Returns the label for a Wikidata item.</p>
+      <h2>WIKIDATALABELS</h2>
+      <p>Returns the labels for a Wikidata item.</p>
       <h3>Arguments</h3>
       <table>
         <tbody>
@@ -889,13 +889,53 @@ Greater Berlin Act
           </tr>
           <tr>
             <td><code>string</code></td>
-            <td>The label.</td>
+            <td>The labels.</td>
           </tr>
         </tbody>
       </table>
       <h3>Example</h3>
-      <pre class="code-example"><code>=WIKIDATALABEL("Q64")</code></pre>
+      <pre class="code-example"><code>=WIKIDATALABELS("Q64")</code></pre>
       <pre class="code-result"><code>en&#9;Berlin</code></pre>
+    </section>
+    <section>
+      <h2>WIKIDATADESCRIPTIONS</h2>
+      <p>Returns the descriptions for a Wikidata item.</p>
+      <h3>Arguments</h3>
+      <table>
+        <tbody>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Type</th>
+            <th scope="col">Description</th>
+          </tr>
+          <tr>
+            <td>qid</td>
+            <td><code>string</code></td>
+            <td>The Wikidata item's qid to get the descriptions for.</td>
+          </tr>
+          <tr>
+            <td>opt_targetLanguages</td>
+            <td><code>Array&lt;string&gt;=</code></td>
+            <td>The list of languages to limit the results to, or "all" (optional).</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>Return Values</h3>
+      <table>
+        <tbody>
+          <tr>
+            <th scope="col">Type</th>
+            <th scope="col">Description</th>
+          </tr>
+          <tr>
+            <td><code>string</code></td>
+            <td>The descriptions.</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>Example</h3>
+      <pre class="code-example"><code>=WIKIDATADESCRIPTIONS("Q64")</code></pre>
+      <pre class="code-result"><code>en&#9;capital and city-state of Germany</code></pre>
     </section>
     <section>
       <h2>WIKIQUARRY</h2>
