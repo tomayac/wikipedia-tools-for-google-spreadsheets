@@ -1,3 +1,3 @@
 # Privacy Policy
 
-This add-on does not store any data. Period.
+This add-on does not access, use, store, and/or share Google user data. Period.
