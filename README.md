@@ -15,7 +15,7 @@ Here's a screenshot:
 Find the [Wikipedia Tools](https://chrome.google.com/webstore/detail/wikipedia-tools/aiilcelhmpllcgkhhpifagfehbddkdfp?utm_source=permalink)
 in the Google Add-on Store and install them by clicking on the blue "+ Free" button.
 
-## Usage documentation
+## Usage Documentation
 
 Once the add-on is installed, click "Add-ons" > "Wikipedia Tools" > "Show documentation"
 in the Google Sheets menu bar to see a sidebar with the full documentation and examples.
