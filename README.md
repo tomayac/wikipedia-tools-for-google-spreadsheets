@@ -2,6 +2,12 @@
 
 A **Google Spreadsheets add-on** that makes working with data from **Wikipedia** and **Wikidata** a joy.
 
+## Demo
+
+See the output of the functions in this [Google spreadsheet](https://docs.google.com/spreadsheets/d/1sVduZul787O-bRzuy0UKpRl7bkouxwaIOsxXuJGm6yg/edit?usp=sharing).
+
+Here's a screenshot:
+
 ![Wikipedia Tools for Google Spreadsheets](https://github.com/tomayac/wikipedia-tools-for-google-spreadsheets/blob/master/screenshot.png "Wikipedia Tools for Google Spreadsheets")
 
 ## Installation
@@ -9,14 +15,13 @@ A **Google Spreadsheets add-on** that makes working with data from **Wikipedia**
 Find the [Wikipedia Tools](https://chrome.google.com/webstore/detail/wikipedia-tools/aiilcelhmpllcgkhhpifagfehbddkdfp?utm_source=permalink)
 in the Google Add-on Store and install them by clicking on the blue "+ Free" button.
 
-## Documentation
+## Usage Documentation
 
 Once the add-on is installed, click "Add-ons" > "Wikipedia Tools" > "Show documentation"
 in the Google Sheets menu bar to see a sidebar with the full documentation and examples.
 
-## Demo
-
-See the output of the functions in this [Google spreadsheet](https://docs.google.com/spreadsheets/d/1sVduZul787O-bRzuy0UKpRl7bkouxwaIOsxXuJGm6yg/edit?usp=sharing).
+The documentation can also be browsed online without installing the addon, by visiting
+[this page](https://rawgit.com/tomayac/wikipedia-tools-for-google-spreadsheets/master/Documentation.html).
 
 ## License
 
