@@ -20,8 +20,8 @@ in the Google Add-on Store and install them by clicking on the blue "+ Free" but
 Once the add-on is installed, click "Add-ons" > "Wikipedia Tools" > "Show documentation"
 in the Google Sheets menu bar to see a sidebar with the full documentation and examples.
 
-The documentation can also be browsed online without installing the addon, by visiting
-[this page](https://rawgit.com/tomayac/wikipedia-tools-for-google-spreadsheets/master/Documentation.html).
+The [documentation](https://tomayac.github.io/wikipedia-tools-for-google-spreadsheets/Documentation.html)
+can also be browsed online without installing the addon.
 
 ## License
 
