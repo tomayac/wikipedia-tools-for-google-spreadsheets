@@ -860,6 +860,41 @@ Greater Berlin Act
       <pre class="code-result"><code>Q64</code></pre>
     </section>
     <section>
+      <h2>WIKIDATASEARCH</h2>
+      <p>Searches for Wikidata entities using Wikidata labels and aliases.</p>
+      <h3>Arguments</h3>
+      <table>
+        <tbody>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Type</th>
+            <th scope="col">Description</th>
+          </tr>
+          <tr>
+            <td>search</td>
+            <td><code>string</code></td>
+            <td>The search string in the format "language:Query" ("de:Berlin") to get the Wikidata qid for.</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>Return Values</h3>
+      <table>
+        <tbody>
+          <tr>
+            <th scope="col">Type</th>
+            <th scope="col">Description</th>
+          </tr>
+          <tr>
+            <td><code>string</code></td>
+            <td>The Wikidata qid.</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>Example</h3>
+      <pre class="code-example"><code>=WIKIDATASEARCH("nb:veldig lett nysnø")</code></pre>
+      <pre class="code-result"><code>Q70596575</code></pre>
+    </section>
+    <section>
       <h2>WIKIDATALABELS</h2>
       <p>Returns the labels for a Wikidata item.</p>
       <h3>Arguments</h3>
