@@ -1431,14 +1431,18 @@ function WIKIDATAQID(article) {
     if (!title) {
       return '';
     }
-    var url = 'https://www.wikidata.org/w/api.php' +
-        '?action=wbgetentities' +
-        '&sites=' + language + 'wiki' +
+    var url = 'https://' + language + '.wikipedia.org/w/api.php' +
+        '?action=query' +
         '&format=json' +
-        '&props=' + // Empty on purpose
+        '&formatversion=2' +
+        '&redirects=1' +
+        '&prop=pageprops' +
+        '&ppprop=wikibase_item' +
         '&titles=' + encodeURIComponent(title);
     var json = JSON.parse(UrlFetchApp.fetch(url, HEADERS).getContentText());
-    results[0] = Object.keys(json.entities)[0];
+    if (json.query.pages[0] && json.query.pages[0].pageprops.wikibase_item) {
+      results[0] = json.query.pages[0].pageprops.wikibase_item;
+    }
   } catch (e) {
     // no-op
   }
