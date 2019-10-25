@@ -1440,8 +1440,8 @@ function WIKIDATAQID(article) {
         '&ppprop=wikibase_item' +
         '&titles=' + encodeURIComponent(title);
     var json = JSON.parse(UrlFetchApp.fetch(url, HEADERS).getContentText());
-    if ( json.query.pages[0] && json.query.pages[0].pageprops.wikibase_item ) {
-        results[0] = json.query.pages[0].pageprops.wikibase_item;
+    if (json.query.pages[0] && json.query.pages[0].pageprops.wikibase_item) {
+      results[0] = json.query.pages[0].pageprops.wikibase_item;
     }
   } catch (e) {
     // no-op
