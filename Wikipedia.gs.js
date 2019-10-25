@@ -1406,7 +1406,7 @@ function WIKISEARCH(query, opt_didYouMean, opt_namespaces) {
 }
 
 /**
- * Returns the Wikidata qid of the corresponding Wikidata item for an article.
+ * Returns the Wikidata qid of the corresponding Wikidata item for a Wikipedia article.
  *
  * @param {string} article The article in the format "language:Query" ("de:Berlin") to get the Wikidata qid for.
  * @return {string} The Wikidata qid.
