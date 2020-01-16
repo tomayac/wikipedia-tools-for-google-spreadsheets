@@ -12,7 +12,7 @@ Here's a screenshot:
 
 ## Installation
 
-Find the [Wikipedia Tools](https://chrome.google.com/webstore/detail/wikipedia-tools/aiilcelhmpllcgkhhpifagfehbddkdfp?utm_source=permalink)
+Find the [Wikipedia Tools](https://gsuite.google.com/marketplace/app/wikipedia_and_wikidata_tools/595109124715?pann=cwsdp&hl=en)
 in the Google Add-on Store and install them by clicking on the blue "+ Free" button.
 
 ## Usage Documentation
