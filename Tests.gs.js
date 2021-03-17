@@ -67,6 +67,8 @@ function _runTests() {
   checkResult('WIKIDATAQID', WIKIDATAQID(article));
   checkResult('WIKIDATAQID', WIKIDATAQID(article.replace('en:', '')));
 
+  checkResult('WIKIDATALOOKUP', WIKIDATALOOKUP('P298', 'AUT'));
+
   checkResult('GOOGLESUGGEST', GOOGLESUGGEST(query));
   checkResult('GOOGLESUGGEST', GOOGLESUGGEST(query.replace('en:', '')));
 
