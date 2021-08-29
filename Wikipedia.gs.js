@@ -1408,16 +1408,22 @@ function WIKISEARCH(query, opt_didYouMean, opt_namespaces) {
 /**
  * Returns the Wikidata qid of the corresponding Wikidata item for a Wikipedia article.
  *
- * @param {string} article The article in the format "language:Query" ("de:Berlin") to get the Wikidata qid for.
- * @return {string} The Wikidata qid.
+ * @param {string|string[][]} article The article(s) in the format "language:Query" ("de:Berlin") to get the Wikidata qid for.
+ * @return {string|string[][]} The Wikidata qid(s).
  * @customfunction
  */
 function WIKIDATAQID(article) {
+  return Array.isArray(article) ?
+      article.map(row => row.map(cell => WIKIDATAQID_NOTARRAY_(cell))) :
+      WIKIDATAQID_NOTARRAY_(article);
+}
+
+function WIKIDATAQID_NOTARRAY_(article) {
   'use strict';
   if (!article) {
     return '';
   }
-  var results = [];
+  var results = '';
   try {
     var language;
     var title;
@@ -1441,12 +1447,12 @@ function WIKIDATAQID(article) {
         '&titles=' + encodeURIComponent(title);
     var json = JSON.parse(UrlFetchApp.fetch(url, HEADERS).getContentText());
     if (json.query.pages[0] && json.query.pages[0].pageprops.wikibase_item) {
-      results[0] = json.query.pages[0].pageprops.wikibase_item;
+      results = json.query.pages[0].pageprops.wikibase_item;
     }
   } catch (e) {
     // no-op
   }
-  return results.length > 0 ? results : '';
+  return results;
 }
 
 /**
