@@ -1408,45 +1408,50 @@ function WIKISEARCH(query, opt_didYouMean, opt_namespaces) {
 /**
  * Returns the Wikidata qid of the corresponding Wikidata item for a Wikipedia article.
  *
- * @param {string} article The article in the format "language:Query" ("de:Berlin") to get the Wikidata qid for.
- * @return {string} The Wikidata qid.
+ * @param {string|string[]} article The article(s) in the format "language:Query" ("de:Berlin") to get the Wikidata qid for.
+ * @return {string|string[]} The Wikidata qid(s).
  * @customfunction
  */
-function WIKIDATAQID(article) {
-  'use strict';
-  if (!article) {
-    return '';
-  }
-  var results = [];
-  try {
-    var language;
-    var title;
-    if (article.indexOf(':') !== -1) {
-      language = article.split(/:(.+)?/)[0];
-      title = article.split(/:(.+)?/)[1];
-    } else {
-      language = DEFAULT_LANGUAGE;
-      title = article;
-    }
-    if (!title) {
+function WIKIDATAQID(input) {
+  function process(article) {
+    'use strict';
+    if (!article) {
       return '';
     }
-    var url = 'https://' + language + '.wikipedia.org/w/api.php' +
-        '?action=query' +
-        '&format=json' +
-        '&formatversion=2' +
-        '&redirects=1' +
-        '&prop=pageprops' +
-        '&ppprop=wikibase_item' +
-        '&titles=' + encodeURIComponent(title);
-    var json = JSON.parse(UrlFetchApp.fetch(url, HEADERS).getContentText());
-    if (json.query.pages[0] && json.query.pages[0].pageprops.wikibase_item) {
-      results[0] = json.query.pages[0].pageprops.wikibase_item;
+    var results = '';
+    try {
+      var language;
+      var title;
+      if (article.indexOf(':') !== -1) {
+        language = article.split(/:(.+)?/)[0];
+        title = article.split(/:(.+)?/)[1];
+      } else {
+        language = DEFAULT_LANGUAGE;
+        title = article;
+      }
+      if (!title) {
+        return '';
+      }
+      var url = 'https://' + language + '.wikipedia.org/w/api.php' +
+          '?action=query' +
+          '&format=json' +
+          '&formatversion=2' +
+          '&redirects=1' +
+          '&prop=pageprops' +
+          '&ppprop=wikibase_item' +
+          '&titles=' + encodeURIComponent(title);
+      var json = JSON.parse(UrlFetchApp.fetch(url, HEADERS).getContentText());
+      if (json.query.pages[0] && json.query.pages[0].pageprops.wikibase_item) {
+        results = json.query.pages[0].pageprops.wikibase_item;
+      }
+    } catch (e) {
+      // no-op
     }
-  } catch (e) {
-    // no-op
+    return results;
   }
-  return results.length > 0 ? results : '';
+  return Array.isArray(input) ?
+      input.map(row => row.map(cell => process(cell))) :
+      process(input);
 }
 
 /**
