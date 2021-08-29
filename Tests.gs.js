@@ -23,11 +23,11 @@ function _runTests() {
 
   var checkResult = function(caller, result) {
     Logger.log(caller + ' ' + (result.length ?
-        '✅ OK: ' + JSON.stringify(result) : '❌ Error' + JSON.stringify(result)));
+        '✅ OK: ' + JSON.stringify(result) : '❌ Error'));
     if (Array.isArray(result)) {
       var pass = result.map(row => row.every(col => col)).every(row => row)
       Logger.log(caller + ' 2D array check ' + (pass ?
-          '✅ 2D array OK: ' + JSON.stringify(result) : '❌ 2D array Error' + JSON.stringify(result)));
+          '✅ 2D array OK: ' + JSON.stringify(result) : '❌ 2D array Error'));
     }
   };
 
