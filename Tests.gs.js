@@ -23,7 +23,12 @@ function _runTests() {
 
   var checkResult = function(caller, result) {
     Logger.log(caller + ' ' + (result.length ?
-        '✅ OK: ' + JSON.stringify(result) : '❌ Error'));
+        '✅ OK: ' + JSON.stringify(result) : '❌ Error' + JSON.stringify(result)));
+    if (Array.isArray(result)) {
+      var pass = result.map(row => row.every(col => col)).every(row => row)
+      Logger.log(caller + ' 2D array check ' + (pass ?
+          '✅ 2D array OK: ' + JSON.stringify(result) : '❌ 2D array Error' + JSON.stringify(result)));
+    }
   };
 
   var project = 'en.wikipedia';
@@ -65,6 +70,7 @@ function _runTests() {
       article.replace('en:', '')));
 
   checkResult('WIKIDATAQID', WIKIDATAQID(article));
+  checkResult('WIKIDATAQID', WIKIDATAQID([[article], [article]]));
   checkResult('WIKIDATAQID', WIKIDATAQID(article.replace('en:', '')));
 
   checkResult('WIKIDATALOOKUP', WIKIDATALOOKUP('P298', 'AUT'));
