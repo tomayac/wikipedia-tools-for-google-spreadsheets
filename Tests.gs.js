@@ -24,6 +24,12 @@ function _runTests() {
   var checkResult = function(caller, result) {
     Logger.log(caller + ' ' + (result.length ?
         '✅ OK: ' + JSON.stringify(result) : '❌ Error'));
+  }
+
+  var check2dArrayInputResult = function(caller, result) {
+    var pass = result.map(row => row.every(col => col)).every(row => row)
+    Logger.log(caller + ' 2D array check ' + (pass ?
+        '✅ 2D array OK: ' + JSON.stringify(result) : '❌ 2D array Error'));
   };
 
   var project = 'en.wikipedia';
@@ -65,6 +71,7 @@ function _runTests() {
       article.replace('en:', '')));
 
   checkResult('WIKIDATAQID', WIKIDATAQID(article));
+  check2dArrayInputResult('WIKIDATAQID', WIKIDATAQID([[article], [article]]));
   checkResult('WIKIDATAQID', WIKIDATAQID(article.replace('en:', '')));
 
   checkResult('WIKIDATALOOKUP', WIKIDATALOOKUP('P298', 'AUT'));
