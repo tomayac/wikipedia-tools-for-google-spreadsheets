@@ -864,6 +864,52 @@ Greater Berlin Act
       <pre class="code-result"><code>Q64</code></pre>
     </section>
     <section>
+      <h2>WIKIDATASITELINKS</h2>
+      <p>Returns the Wikipedia site links for a given Wikidata item.</p>
+      <h3>Arguments</h3>
+      <table>
+        <tbody>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Type</th>
+            <th scope="col">Description</th>
+          </tr>
+          <tr>
+            <td>qid</td>
+            <td><code>string</code></td>
+            <td>The Wikidata item QID to get the Wikipedia site links for.</td>
+          </tr>
+          <tr>
+            <td>opt_sitefilter</td>
+            <td><code>Array&lt;string&gt;=</code></td>
+            <td>The list of Wikipedia sites to limit the results to (optional).</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>Return Values</h3>
+      <table>
+        <tbody>
+          <tr>
+            <th scope="col">Type</th>
+            <th scope="col">Description</th>
+          </tr>
+          <tr>
+            <td><code>Array&lt;string&gt;</code></td>
+            <td>The list of Wikipedia site links.</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>Example</h3>
+      <pre class="code-example"><code>=WIKIDATASITELINKS("Q42")</code></pre>
+      <pre class="code-result"><code>enwiki&#9;Douglas Adams
+    dewiki&#9;Douglas Adams
+    frwiki&#9;Douglas Adams
+    …</code></pre>
+      <pre class="code-example"><code>=WIKIDATASITELINKS("Q42", {"en", "de"})</code></pre>
+      <pre class="code-result"><code>en&#9;Douglas Adams
+    de&#9;Douglas Adams</code></pre>
+    </section>
+    <section>
       <h2>WIKIDATALOOKUP</h2>
       <p>Returns the Wikidata qid of the given identifier and property.</p>
       <p>Internally, this function invokes a <code>haswbstatement</code> query against the  Wikidata API.</p>

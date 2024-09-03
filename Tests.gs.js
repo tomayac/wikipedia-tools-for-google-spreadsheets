@@ -67,6 +67,9 @@ function _runTests() {
   checkResult('WIKIDATAQID', WIKIDATAQID(article));
   checkResult('WIKIDATAQID', WIKIDATAQID(article.replace('en:', '')));
 
+  checkResult('WIKIDATASITELINKS', WIKIDATASITELINKS(qid));
+  checkResult('WIKIDATASITELINKS', WIKIDATASITELINKS(qid, opt_targetLanguages));
+
   checkResult('WIKIDATALOOKUP', WIKIDATALOOKUP('P298', 'AUT'));
 
   checkResult('GOOGLESUGGEST', GOOGLESUGGEST(query));

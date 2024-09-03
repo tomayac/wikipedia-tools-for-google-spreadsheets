@@ -884,6 +884,43 @@ function WIKIDATAFACTS(article, opt_multiObjectMode, opt_properties) {
 }
 
 /**
+ * Returns the Wikipedia site links for a given Wikidata item.
+ *
+ * @param {string} qid The Wikidata item QID to get the Wikipedia site links for.
+ * @param {Array<string>=} opt_sitefilter The list of Wikipedia sites to limit the results to (optional).
+ * @return {Array<string>} The list of site links.
+ * @customfunction
+ */
+function WIKIDATASITELINKS(qid, opt_sitefilter) {
+  'use strict';
+  if (!qid) {
+    return '';
+  }
+  var results = [];
+  try {
+    opt_sitefilter = opt_sitefilter || [];
+    opt_sitefilter = Array.isArray(opt_sitefilter) ? opt_sitefilter : [opt_sitefilter];
+    var sitefilterQuery = opt_sitefilter.length ? '&sitefilter=' + opt_sitefilter.map(site => site + 'wiki').join('%7C') : '';
+    var url = 'https://www.wikidata.org/w/api.php' +
+        '?format=json' +
+        '&action=wbgetentities' +
+        '&props=sitelinks' +
+        '&ids=' + qid +
+        sitefilterQuery;
+    var json = JSON.parse(UrlFetchApp.fetch(url, HEADERS).getContentText());
+    var sitelinks = json.entities[qid].sitelinks;
+    var availableSites = Object.keys(sitelinks).sort();
+    availableSites.forEach(function(site) {
+      var link = sitelinks[site].title;
+      results.push([site.replace(/wiki$/, ''), link]);
+    });
+  } catch (e) {
+    // no-op
+  }
+  return results.length > 0 ? results : '';
+}
+
+/**
  * Returns Wikipedia pageviews statistics for a Wikipedia article.
  *
  * @param {string} article The Wikipedia article in the format "language:Article_Title" ("de:Berlin") to get pageviews statistics for.
@@ -1451,7 +1488,7 @@ function WIKIDATAQID(article) {
 
 /**
  * Returns the Wikidata qid of the given identifier and property.
- * 
+ *
  * Internally, this function invokes a haswbstatement query against the  Wikidata API.
  *
  * @param {string} property The Wikidata property (such as "P298").
